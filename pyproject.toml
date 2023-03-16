@@ -46,13 +46,13 @@ cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_p
 no-cov = "cov --no-cov {args}"
 
 [[tool.hatch.envs.test.matrix]]
-python = ["38", "39", "310", "311"]
+python = ["310", "311"]  # Lower versions handled by CI
 
 [tool.coverage.run]
 branch = true
 parallel = true
 omit = [
-  "asdf_pydantic/__about__.py",
+  "asdf_pydantic/__version__.py",
 ]
 
 [tool.coverage.report]

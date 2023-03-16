@@ -1,0 +1,63 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "asdf-pydantic"
+description = 'Create ASDF tags and schema with pydantic models'
+readme = "README.md"
+requires-python = ">=3.8"
+license-files = {paths = ["LICENSE"]}
+keywords = []
+authors = [
+  { name = "Keto D. Zhang", email = "keto.zhang@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "asdf>=2",
+  "pydantic>=1",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/ketozhang/asdf-pydantic#readme"
+Issues = "https://github.com/ketozhang/asdf-pydantic/issues"
+Source = "https://github.com/ketozhang/asdf-pydantic"
+
+[tool.hatch.version]
+path = "asdf_pydantic/__version__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "pytest-cov",
+]
+[tool.hatch.envs.default.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
+no-cov = "cov --no-cov {args}"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["38", "39", "310", "311"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "asdf_pydantic/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

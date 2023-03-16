@@ -40,6 +40,7 @@ path = "asdf_pydantic/__version__.py"
 dependencies = [
   "pytest",
   "pytest-cov",
+  "ipython",
 ]
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"

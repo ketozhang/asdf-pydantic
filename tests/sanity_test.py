@@ -20,7 +20,7 @@ class RectangleConverter(Converter):
     types = ["tests.sanity_test.Rectangle"]
 
     def to_yaml_tree(self, obj, tag, ctx):
-        return obj.json()
+        return obj.asdf_yaml_tree()
 
     def from_yaml_tree(self, node, tag, ctx):
         return Rectangle.parse_obj(node)

@@ -17,7 +17,7 @@ class Rectangle(AsdfBaseModel):
 
 class RectangleConverter(Converter):
     tags = ["asdf://example.com/shapes/tags/rectangle-1.0.0"]
-    types = ["tests.model_test.Rectangle"]
+    types = ["tests.sanity_test.Rectangle"]
 
     def to_yaml_tree(self, obj, tag, ctx):
         return obj.json()
@@ -49,6 +49,6 @@ def test_sanity_create_rectangle_from_dict():
 
 
 def test_create_asdf_file():
-    with asdf.AsdfFile() as af, NamedTemporaryFile() as tempfile:
-        af["rect"] = Rectangle(width=42, height=10)
+    with NamedTemporaryFile() as tempfile:
+        af = asdf.AsdfFile({"rect": Rectangle(width=42, height=10)})
         af.write_to(tempfile.name)

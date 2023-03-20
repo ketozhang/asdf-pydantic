@@ -4,6 +4,14 @@ from pydantic import BaseModel
 
 
 class AsdfBaseModel(ABC, BaseModel):
+    """
+
+    ASDF Serialization and Deserialization:
+        Serialize to ASDF yaml tree is done with the
+        py:classmethod`AsdfBaseModel.asdf_yaml_tree()` and deserialize to an
+        AsdfBaseModel object with py:meth`AsdfBaseModel.parse_obj()`.
+    """
+
     def asdf_yaml_tree(self) -> dict:
         d = {}
         for field_key, v in self.__dict__.items():

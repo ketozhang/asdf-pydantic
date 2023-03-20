@@ -4,16 +4,16 @@ import asdf
 from asdf.extension import Extension
 
 from asdf_pydantic.converter import create_converter
-from asdf_pydantic.examples.shapes import Rectangle
+from asdf_pydantic.examples.shapes import AsdfPydanticRectangle
 
 
 class ShapesExtension(Extension):
     extension_uri = "asdf://example.com/shapes/extensions/shapes-1.0.0"  # type: ignore
     converters = [
         create_converter(
-            Rectangle,
+            AsdfPydanticRectangle,
             tags=["asdf://example.com/shapes/tags/rectangle-1.0.0"],
-            types=["asdf_pydantic.examples.shapes.Rectangle"],
+            types=["asdf_pydantic.examples.shapes.AsdfPydanticRectangle"],
         )
     ]  # type: ignore
     tags = ["asdf://example.com/shapes/tags/rectangle-1.0.0"]  # type: ignore
@@ -25,5 +25,5 @@ def setup_module():
 
 def test_create_asdf_file():
     with NamedTemporaryFile() as tempfile:
-        af = asdf.AsdfFile({"rect": Rectangle(width=42, height=10)})
+        af = asdf.AsdfFile({"rect": AsdfPydanticRectangle(width=42, height=10)})
         af.write_to(tempfile.name)

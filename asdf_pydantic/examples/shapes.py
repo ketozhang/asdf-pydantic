@@ -1,7 +1,7 @@
 from asdf_pydantic import AsdfBaseModel
 
 
-class Rectangle(AsdfBaseModel):
+class AsdfPydanticRectangle(AsdfBaseModel):
     width: float
     height: float
 

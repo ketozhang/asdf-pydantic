@@ -33,6 +33,9 @@ Documentation = "https://github.com/ketozhang/asdf-pydantic#readme"
 Issues = "https://github.com/ketozhang/asdf-pydantic/issues"
 Source = "https://github.com/ketozhang/asdf-pydantic"
 
+[project.entry-points]
+'asdf.extensions' = { asdf_pydantic_extension = 'asdf_pydantic.examples.extensions:get_extensions' }
+
 [tool.hatch.version]
 path = "asdf_pydantic/__version__.py"
 

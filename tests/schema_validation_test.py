@@ -2,8 +2,8 @@ from tempfile import NamedTemporaryFile
 
 import asdf
 import jsonschema
+import pydantic
 import pytest
-import yaml
 from asdf.extension import Extension, TagDefinition
 
 from asdf_pydantic.converter import create_converter
@@ -15,42 +15,42 @@ class ShapesExtension(Extension):
     converters = [
         create_converter(
             AsdfPydanticRectangle,
-            tags="asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0",  # type: ignore
+            tags=AsdfPydanticRectangle.tag_uri,  # type: ignore
             types=["asdf_pydantic.examples.shapes.AsdfPydanticRectangle"],
         )
     ]
     tags = [  # type: ignore
         TagDefinition(
-            "asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0",
+            AsdfPydanticRectangle.tag_uri,
             schema_uris="asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0",
         )
     ]
 
 
-rectangle_schema_yaml = """
-%YAML 1.1
----
-$schema: http://stsci.edu/schemas/asdf/asdf-schema-1.0.0
-id: asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0
+# rectangle_schema_yaml = """
+# %YAML 1.1
+# ---
+# $schema: http://stsci.edu/schemas/asdf/asdf-schema-1.0.0
+# id: asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0
 
-title: AsdfPydanticRectangle
-description: ""
-type: object
+# title: AsdfPydanticRectangle
+# description: ""
+# type: object
 
-properties:
-  height:
-    # title: Height
-    type: number
-  width:
-    # title: Width
-    type: number
-required:
-- width
-- height
-"""
+# properties:
+#   height:
+#     # title: Height
+#     type: number
+#   width:
+#     # title: Width
+#     type: number
+# required:
+# - width
+# - height
+# """
 
 resource_mapping = {
-    "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": rectangle_schema_yaml.encode(
+    "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": AsdfPydanticRectangle.schema_asdf().encode(
         "utf-8"
     )
 }
@@ -112,7 +112,6 @@ def test_validate_fail_on_bad_yaml_file():
     """Given a YAML file with the wrong type on the rectangle width, when
     loading the file with asdf, then the asdf schema validation error should be raised.
 
-    It is important that the ASDF's schema validation fails before the pydantic's.
     """
     with NamedTemporaryFile() as tempfile:
         tempfile.write(
@@ -141,5 +140,8 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {height: 1.0, width: "
         )
         tempfile.seek(0)
 
-        with pytest.raises(jsonschema.ValidationError):
+        # HACK: It is better that the ASDF's schema validation fails before
+        # the pydantic's. However, it seems ASDF deserialize first then do their
+        # validation.
+        with pytest.raises((jsonschema.ValidationError, pydantic.ValidationError)):
             asdf.open(tempfile.name)

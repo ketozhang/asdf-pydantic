@@ -1,3 +1,6 @@
+import textwrap
+from typing import ClassVar
+
 from pydantic import BaseModel
 
 
@@ -9,6 +12,8 @@ class AsdfBaseModel(BaseModel):
         py:classmethod`AsdfBaseModel.asdf_yaml_tree()` and deserialize to an
         AsdfBaseModel object with py:meth`AsdfBaseModel.parse_obj()`.
     """
+
+    tag_uri: ClassVar[str]
 
     def asdf_yaml_tree(self) -> dict:
         d = {}
@@ -31,3 +36,25 @@ class AsdfBaseModel(BaseModel):
                 )
 
         return d
+
+    @classmethod
+    def schema_asdf(
+        cls, *, metaschema="http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
+    ) -> str:
+        # TODO: Function signature should follow BaseModel.schema() or
+        # BaseModel.schema_json()
+        import yaml
+
+        header = textwrap.dedent(
+            f"""
+            %YAML 1.1
+            ---
+            $schema: {metaschema}
+            id: {cls.tag_uri}
+
+            """
+        )
+
+        body = yaml.dump(cls.schema())
+
+        return header + body

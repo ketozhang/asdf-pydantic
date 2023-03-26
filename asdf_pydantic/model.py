@@ -1,9 +1,7 @@
-from abc import ABC
-
 from pydantic import BaseModel
 
 
-class AsdfBaseModel(ABC, BaseModel):
+class AsdfBaseModel(BaseModel):
     """
 
     ASDF Serialization and Deserialization:

@@ -30,6 +30,6 @@ def create_converter(
 ) -> Converter:
     converter = AsdfPydanticConverter()
     converter._model_class = model_class
-    converter.tags = tags or model_class.tag_uri  # type: ignore
+    converter.tags = tags or [model_class.tag_uri]  # type: ignore
     converter.types = types  # type: ignore
     return converter

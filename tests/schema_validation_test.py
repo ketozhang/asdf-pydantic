@@ -117,7 +117,6 @@ rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width:
         # validation.
         with pytest.raises((jsonschema.ValidationError, pydantic.ValidationError)):
             asdf.open(tempfile.name)
-            asdf.open(tempfile.name)
 
 
 @pytest.mark.xfail(

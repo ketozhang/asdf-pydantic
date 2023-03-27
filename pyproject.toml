@@ -41,16 +41,16 @@ path = "asdf_pydantic/__version__.py"
 
 [tool.hatch.envs.default]
 dependencies = [
+  "ipython",
   "pytest",
   "pytest-cov",
   "ipython",
+  "astropy",
+  "asdf-astropy"
 ]
 [tool.hatch.envs.default.scripts]
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
-no-cov = "cov --no-cov {args}"
-
-[[tool.hatch.envs.test.matrix]]
-python = ["310", "311"]  # Lower versions handled by CI
+test = "pytest"
+test-cov = "test --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
 
 [tool.coverage.run]
 branch = true

@@ -1,18 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
-
-import pydantic
-
-from asdf_pydantic import AsdfBaseModel
-
-
-class Node(pydantic.BaseModel):
-    child: Optional[Node] = None
-
-
-class AsdfNode(Node, AsdfBaseModel):
-    child: Optional[Node | AsdfNode] = None
+from asdf_pydantic.examples.tree import AsdfNode, Node
 
 
 def test_sanity():

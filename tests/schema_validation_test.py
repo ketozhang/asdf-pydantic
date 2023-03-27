@@ -4,61 +4,33 @@ import asdf
 import jsonschema
 import pydantic
 import pytest
+import yaml
 from asdf.extension import Extension, TagDefinition
 
 from asdf_pydantic.converter import create_converter
-from asdf_pydantic.examples.shapes import AsdfPydanticRectangle
+from asdf_pydantic.examples.extensions import ExampleExtension
+from asdf_pydantic.examples.shapes import AsdfRectangle
+from asdf_pydantic.examples.tree import AsdfNode
 
 
-class ShapesExtension(Extension):
-    extension_uri = "asdf://asdf-pydantic/shapes/extensions/shapes-1.0.0"  # type: ignore
-    converters = [
-        create_converter(
-            AsdfPydanticRectangle,
-            tags=AsdfPydanticRectangle.tag_uri,  # type: ignore
-            types=["asdf_pydantic.examples.shapes.AsdfPydanticRectangle"],
-        )
-    ]
+class TestExtension(ExampleExtension):
     tags = [  # type: ignore
         TagDefinition(
-            AsdfPydanticRectangle.tag_uri,
+            AsdfRectangle.tag_uri,
             schema_uris="asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0",
         )
     ]
 
 
-# rectangle_schema_yaml = """
-# %YAML 1.1
-# ---
-# $schema: http://stsci.edu/schemas/asdf/asdf-schema-1.0.0
-# id: asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0
-
-# title: AsdfPydanticRectangle
-# description: ""
-# type: object
-
-# properties:
-#   height:
-#     # title: Height
-#     type: number
-#   width:
-#     # title: Width
-#     type: number
-# required:
-# - width
-# - height
-# """
-
-resource_mapping = {
-    "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": AsdfPydanticRectangle.schema_asdf().encode(
-        "utf-8"
-    )
-}
-
-
 def setup_module():
-    asdf.get_config().add_extension(ShapesExtension())
-    asdf.get_config().add_resource_mapping(resource_mapping)
+    asdf.get_config().add_extension(TestExtension())
+    asdf.get_config().add_resource_mapping(
+        {
+            "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": AsdfRectangle.schema_asdf().encode(
+                "utf-8"
+            )
+        }
+    )
 
 
 def test_schema_exists_and_valid():
@@ -69,7 +41,7 @@ def test_schema_exists_and_valid():
 
 def test_create_asdf_file():
     with NamedTemporaryFile() as tempfile:
-        af = asdf.AsdfFile({"rect": AsdfPydanticRectangle(width=10, height=10)})
+        af = asdf.AsdfFile({"rect": AsdfRectangle(width=10, height=10)})
         af.write_to(tempfile.name)
 
 
@@ -95,11 +67,11 @@ history:
         software: !core/software-1.0.0 {name: asdf, version: 2.11.2}
     - !core/extension_metadata-1.0.0
         extension_class: asdf_pydantic.examples.extensions.AsdfPydanticShapesExtension
-        extension_uri: asdf://asdf-pydantic/shapes/extensions/shapes-1.0.0
+        extension_uri: asdf://asdf-pydantic/examples/extensions/examples-1.0.0
         software: !core/software-1.0.0 {name: asdf-pydantic, version: 0.1.0}
-rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {height: 10.0, width: 10.0}
+rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 10.0, width: 10.0}
 ...
-    """.rstrip().encode(
+    """.strip().encode(
                 "utf-8"
             )
         )
@@ -130,9 +102,9 @@ history:
         software: !core/software-1.0.0 {name: asdf, version: 2.11.2}
     - !core/extension_metadata-1.0.0
         extension_class: asdf_pydantic.examples.extensions.AsdfPydanticShapesExtension
-        extension_uri: asdf://asdf-pydantic/shapes/extensions/shapes-1.0.0
+        extension_uri: asdf://asdf-pydantic/examples/extensions/examples-1.0.0
         software: !core/software-1.0.0 {name: asdf-pydantic, version: 0.1.0}
-rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {height: 1.0, width: "somestr"}
+rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width: "somestr"}
 ...
     """.strip().encode(
                 "utf-8"
@@ -145,3 +117,18 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {height: 1.0, width: "
         # validation.
         with pytest.raises((jsonschema.ValidationError, pydantic.ValidationError)):
             asdf.open(tempfile.name)
+            asdf.open(tempfile.name)
+
+
+@pytest.mark.xfail(
+    reason="Until schema replaces `$ref` with `tag` for tagged Asdf objects"
+)
+def test_given_child_field_contains_asdf_object_then_schema_has_child_tag():
+    from asdf.schema import check_schema
+
+    schema = yaml.safe_load(AsdfNode.schema_asdf())  # type: ignore
+    check_schema(schema)
+
+    child_schema = schema["definitions"]["AsdfNode"]["properties"]["child"]
+
+    assert {"tag": AsdfNode.tag_uri} in child_schema["anyOf"]

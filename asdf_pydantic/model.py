@@ -1,6 +1,7 @@
 import textwrap
 from typing import ClassVar
 
+import yaml
 from pydantic import BaseModel
 
 
@@ -39,12 +40,19 @@ class AsdfBaseModel(BaseModel):
 
     @classmethod
     def schema_asdf(
-        cls, *, metaschema="http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
+        cls, *, metaschema: str = "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
     ) -> str:
+        """Get the ASDF schema definition for this model.
+
+        Parameters
+        ----------
+        metaschema, optional
+            A metaschema URI, by default "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0".
+            See https://asdf.readthedocs.io/en/stable/asdf/extending/schemas.html#anatomy-of-a-schema
+            for more options.
+        """
         # TODO: Function signature should follow BaseModel.schema() or
         # BaseModel.schema_json()
-        import yaml
-
         header = textwrap.dedent(
             f"""
             %YAML 1.1
@@ -54,7 +62,5 @@ class AsdfBaseModel(BaseModel):
 
             """
         )
-
         body = yaml.dump(cls.schema())
-
         return header + body

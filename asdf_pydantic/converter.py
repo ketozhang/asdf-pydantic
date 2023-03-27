@@ -23,10 +23,13 @@ class AsdfPydanticConverter(Converter):
 
 
 def create_converter(
-    model_class: Type[AsdfBaseModel], tags: list[str | TagDefinition], types: list[str]
+    model_class: Type[AsdfBaseModel],
+    *,
+    tags: list[str | TagDefinition | None] = None,
+    types: list[str]
 ) -> Converter:
     converter = AsdfPydanticConverter()
     converter._model_class = model_class
-    converter.tags = tags
-    converter.types = types
+    converter.tags = tags or model_class.tag_uri  # type: ignore
+    converter.types = types  # type: ignore
     return converter

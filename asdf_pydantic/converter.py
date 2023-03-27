@@ -25,7 +25,7 @@ class AsdfPydanticConverter(Converter):
 def create_converter(
     model_class: Type[AsdfBaseModel],
     *,
-    tags: list[str | TagDefinition | None] = None,
+    tags: list[str | TagDefinition] | None = None,
     types: list[str]
 ) -> Converter:
     converter = AsdfPydanticConverter()

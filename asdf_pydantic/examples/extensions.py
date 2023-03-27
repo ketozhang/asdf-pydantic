@@ -10,14 +10,12 @@ class ExampleExtension(Extension):
     converters = [
         create_converter(
             AsdfRectangle,
-            tags=[AsdfRectangle.tag_uri],
             types=[
                 "asdf_pydantic.examples.shapes.AsdfRectangle",
             ],
         ),
         create_converter(
             AsdfNode,
-            tags=[AsdfNode.tag_uri],
             types=[
                 "asdf_pydantic.examples.tree.AsdfNode",
             ],

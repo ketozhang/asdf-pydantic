@@ -35,27 +35,22 @@ class Rectangle(AsdfPydanticModel):
 
 Create your extension specification
 ```py
-# mypackage/extension
+# mypackage/extensions.py
 from asdf.extension import Extension
 
-from asdf_pydantic.converter import create_converter
+from asdf_pydantic.converter import register_models_to_converter
+
+AsdfPydanticConverter.register_models(AsdfRectangle)
 
 class ShapesExtension(Extension):
-    extension_uri = "asdf://asdf-pydantic/shapes/extensions/shapes-1.0.0"
-    converters = [
-        create_converter(
-            Rectangle,
-            tags=["asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0"],
-            types=["mypackage.shapes.Rectangle"],
-        )
-    ]
-    tags = ["asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0"]
+    extension_uri = "asdf://asdf-pydantic/examples/extensions/shapes-1.0.0"
+    converters = [AsdfPydanticConverter()]
+    tags = [*AsdfPydanticConverter().tags]
 ```
 
 Install
 
 ```py
-# main.py
 # main.py
 import asdf
 from mypackage.shapes import Rectangle

@@ -41,6 +41,9 @@ class AsdfPydanticConverter(Converter):
     def types(self) -> tuple[str | Type]:
         return tuple(self._tag_to_class.values())
 
+    def select_tag(self, obj, tags, ctx):
+        return obj._tag
+
     def to_yaml_tree(self, obj: AsdfPydanticModel, tag, ctx):
         return obj.asdf_yaml_tree()
 

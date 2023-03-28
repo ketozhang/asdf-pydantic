@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel
 
@@ -14,4 +14,4 @@ class Node(BaseModel):
 class AsdfNode(Node, AsdfPydanticModel):
     _tag = "asdf://asdf-pydantic/examples/tags/node-1.0.0"
 
-    child: Optional[Node | AsdfNode] = None
+    child: Optional[Union[Node, AsdfNode]] = None

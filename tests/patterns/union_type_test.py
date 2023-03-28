@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import asdf
 import pytest
@@ -13,9 +13,9 @@ class UnionObject(AsdfPydanticModel):
     _tag = "asdf://asdf-pydantic/examples/tags/unionobject-1.0.0"
 
     # Order of type matters
-    int_or_str: int | str = 0
-    datetime_or_time: datetime | Time = datetime(2023, 1, 1)
-    collection: tuple | list = tuple()
+    int_or_str: Union[int, str] = 0
+    datetime_or_time: Union[datetime, Time] = datetime(2023, 1, 1)
+    collection: Union[tuple, list] = tuple()
     anything: Optional[Any] = None
 
 

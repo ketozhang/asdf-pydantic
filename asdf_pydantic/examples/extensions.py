@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from asdf.extension import Extension
 
 from asdf_pydantic.converter import AsdfPydanticConverter

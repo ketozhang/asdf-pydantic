@@ -13,6 +13,8 @@ Create ASDF tags with *pydantic* models.
 from asdf_pydantic import AsdfPydanticModel
 
 class Rectangle(AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/rectangle-1.0.0"
+
     width: float
     height: float
 
@@ -54,7 +56,8 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
 
 - [x] Create ASDF tag from your *pydantic* models with batteries ([converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)) included.
 - [x] Validates data models as you create them and not only when reading and writing ASDF files.
-- [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, Pydantic types)
+- [x] Preserve Python types when deserializing ASDF files.
+- [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types)
 - [ ] <span style="color: #736f73">Comes with schemas.</span>
 
 ## Installation
@@ -71,6 +74,8 @@ Define your data model
 from asdf_pydantic import AsdfPydanticModel
 
 class Rectangle(AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/rectangle-1.0.0"
+
     width: float
     height: float
 ```
@@ -82,7 +87,7 @@ from asdf.extension import Extension
 from asdf_pydantic.converter import AsdfPydanticConverter
 from mypackage.shapes import Rectangle
 
-AsdfPydanticConverter.register_models(Rectangle)
+AsdfPydanticConverter.add_models(Rectangle)
 
 class ShapesExtension(Extension):
     extension_uri = "asdf://asdf-pydantic/examples/extensions/shapes-1.0.0"
@@ -97,10 +102,13 @@ Install the extension either by entry point specification or add it to
 import asdf
 from mypackage.extensions import ShapeExtension
 
-asdf.get_config().register_extension(ShapeExtension)
+asdf.get_config().add_extension(ShapesExtension())
 
 af = asdf.AsdfFile()
 af["rect"] = Rectangle(width=1, height=1)
+
+with open("shapes.asdf", "wb") as fp:
+    af.write_to(fp)
 ```
 
 ---

@@ -84,12 +84,16 @@ pip install asdf-pydantic
 ## Usage
 
 Define your data model
+```py
+# mypackage/shapes.py
+from asdf_pydantic import AsdfPydanticModel
 
+class Rectangle(AsdfPydanticModel):
+    width: float
+    height: float
+```
 
-
-
-Let's take a look at how fast you can create an extension with converters
-already included with *asdf-pydantic*.
+Then create an extension with the converter included with *asdf-pydantic*:
 ```py
 # mypackage/extensions.py
 from asdf.extension import Extension
@@ -102,6 +106,75 @@ class ShapesExtension(Extension):
     extension_uri = "asdf://asdf-pydantic/examples/extensions/shapes-1.0.0"
     converters = [AsdfPydanticConverter()]
     tags = [*AsdfPydanticConverter().tags]
+```
+
+Install the extension either by entry point specification or add it to
+`asdf.get_config()`:
+
+```py
+import asdf
+from mypackage.extensions import ShapeExtension
+
+asdf.get_config().register_extension(ShapeExtension)
+
+af = asdf.AsdfFile(
+    {
+        "toybox": [
+            Rectangle(width=1, height=1),
+            Rectangle(width=2, height=3),
+        ]
+    }
+)
+```
+
+### Pydantic Features
+
+```py
+from datetime import datetime
+from tempfile import NamedTemporaryFile
+
+import asdf
+import astropy.units as u
+from astropy.units import Quantity
+
+from asdf_pydantic import AsdfPydanticModel
+
+
+class DataPoint(AsdfPydanticModel):
+    time: datetime
+    distance: Quantity[u.m]
+
+    _tag = "asdf://asdf-pydantic/examples/tags/datapoint-1.0.0"
+
+from asdf_pydantic import AsdfPydanticConverter
+
+AsdfPydanticConverter.add_models(DataPoint)
+
+class TimeSeriesExtension():
+    extension_uri = "asdf://asdf-pydantic/examples/extensions/timeseries-1.0.0"
+    converters = [AsdfPydanticConverter()]
+    tags = [*AsdfPydanticConverter().tags]
+
+asdf.get_config().add_extension(TimeSeriesExtension())
+
+af = asdf.AsdfFile(
+    {
+        "positions": [
+                DataPoint(
+                    time="2023-01-01T00:00:00",
+                    distance=0*u.m,
+                ),
+                DataPoint(**{
+                    "time": "2023-01-01T01:00:00",
+                    "distance": 1*u.m,
+                }),
+            ]
+        )
+    }
+)
+
+with open("positions.asdf", "w", encoding="utf-8") as f:
+    af.write_to(f)
 ```
 
 ## License

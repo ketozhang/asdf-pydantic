@@ -16,6 +16,9 @@ class AsdfPydanticModel(BaseModel):
 
     _tag: ClassVar[str]
 
+    class Config:
+        arbitrary_types_allowed = True
+
     def asdf_yaml_tree(self) -> dict:
         d = {}
         for field_key, v in self.__dict__.items():

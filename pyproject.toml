@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "asdf-pydantic"
-description = 'Create ASDF tags and schema with pydantic models'
+description = 'Create ASDF tags with pydantic models'
 readme = "README.md"
 requires-python = ">=3.8"
 license-files = {paths = ["LICENSE"]}

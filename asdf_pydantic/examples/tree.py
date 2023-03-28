@@ -13,4 +13,5 @@ class Node(BaseModel):
 
 class AsdfNode(Node, AsdfPydanticModel):
     _tag = "asdf://asdf-pydantic/examples/tags/node-1.0.0"
+
     child: Optional[Node | AsdfNode] = None

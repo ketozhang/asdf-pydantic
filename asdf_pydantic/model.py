@@ -5,13 +5,13 @@ import yaml
 from pydantic import BaseModel
 
 
-class AsdfBaseModel(BaseModel):
+class AsdfPydanticModel(BaseModel):
     """
 
     ASDF Serialization and Deserialization:
         Serialize to ASDF yaml tree is done with the
-        py:classmethod`AsdfBaseModel.asdf_yaml_tree()` and deserialize to an
-        AsdfBaseModel object with py:meth`AsdfBaseModel.parse_obj()`.
+        py:classmethod`AsdfPydanticModel.asdf_yaml_tree()` and deserialize to an
+        AsdfPydanticModel object with py:meth`AsdfPydanticModel.parse_obj()`.
     """
 
     tag_uri: ClassVar[str]
@@ -22,7 +22,7 @@ class AsdfBaseModel(BaseModel):
             if field_key not in self.__fields__:
                 continue
 
-            if isinstance(v, AsdfBaseModel):
+            if isinstance(v, AsdfPydanticModel):
                 d[field_key] = v
             else:
                 d[field_key] = self._get_value(

@@ -1,1 +1,3 @@
-from .model import AsdfBaseModel
+from .model import AsdfPydanticModel
+
+__all__ = ["AsdfPydanticModel"]

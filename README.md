@@ -9,9 +9,10 @@ Create ASDF tags and schemas with *pydantic* models
 
 ## Features
 
-- Automatically create [ASDF Converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)
-and [schemas](https://asdf.readthedocs.io/en/stable/asdf/extending/extensions.html#additional-tags) for your tags.
-- Serialize custom objects using pydantic's JSON encoder configs.
+- [x] Create ASDF tag from your *pydantic* models (batteries and [converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html) included)
+- [x] Validates data models as you create them and not only when reading and writing ASDF files.
+- [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, Pydantic types)
+- <span style="color: #736f73">Comes with schemas.</span>
 
 ## Installation
 
@@ -24,10 +25,10 @@ pip install asdf-pydantic
 Define your data model
 ```py
 # mypackage/shapes.py
-from asdf_pydantic import AsdfBaseModel
+from asdf_pydantic import AsdfPydanticModel
 
 
-class Rectangle(AsdfBaseModel):
+class Rectangle(AsdfPydanticModel):
     width: float
     height: float
 ```

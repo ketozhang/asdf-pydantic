@@ -5,10 +5,10 @@ from typing import Optional
 
 import astropy.units as u
 
-from asdf_pydantic import AsdfBaseModel
+from asdf_pydantic import AsdfPydanticModel
 
 
-class AsdfTimeEntry(AsdfBaseModel):
+class AsdfTimeEntry(AsdfPydanticModel):
     tag_uri = "asdf://asdf-pydantic/examples/tags/time-entry-1.0.0"
     time: Optional[datetime] = None
     speed: u.Quantity[u.m / u.s]

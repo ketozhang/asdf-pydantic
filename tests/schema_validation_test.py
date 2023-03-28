@@ -49,9 +49,9 @@ def test_validate_pass_on_good_yaml_file():
     asdf, then validation should pass.
     """
     with NamedTemporaryFile() as tempfile:
-
         tempfile.write(
-            """\
+            (
+                """\
 #ASDF 1.0.0
 #ASDF_STANDARD 1.5.0
 %YAML 1.1
@@ -70,9 +70,10 @@ history:
         software: !core/software-1.0.0 {name: asdf-pydantic, version: 0.1.0}
 rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 10.0, width: 10.0}
 ...
-    """.strip().encode(
-                "utf-8"
+    """  # noqa: E501
             )
+            .strip()
+            .encode("utf-8")
         )
         tempfile.seek(0)
 
@@ -86,7 +87,8 @@ def test_validate_fail_on_bad_yaml_file():
     """
     with NamedTemporaryFile() as tempfile:
         tempfile.write(
-            """
+            (
+                """
 #ASDF 1.0.0
 #ASDF_STANDARD 1.5.0
 %YAML 1.1
@@ -105,9 +107,10 @@ history:
         software: !core/software-1.0.0 {name: asdf-pydantic, version: 0.1.0}
 rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width: "somestr"}
 ...
-    """.strip().encode(
-                "utf-8"
+    """  # noqa: E501
             )
+            .strip()
+            .encode("utf-8")
         )
         tempfile.seek(0)
 

@@ -3,12 +3,11 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/asdf-pydantic.svg)](https://pypi.org/project/asdf-pydantic)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/asdf-pydantic.svg)](https://pypi.org/project/asdf-pydantic)
+[![Documentation Status](https://readthedocs.org/projects/asdf-pydantic/badge/?version=latest)](https://asdf-pydantic.readthedocs.io/en/latest/?badge=latest)
 
 Create ASDF tags with *pydantic* models.
 
-<table>
-<tr>
-<td>
+<div style="width: 66vw; margin:auto;">
 
 ```py
 from asdf_pydantic import AsdfPydanticModel
@@ -22,9 +21,6 @@ class Rectangle(AsdfPydanticModel):
 af = asdf.AsdfFile()
 af["rect"] = Rectangle(width=1, height=1)
 ```
-
-</td>
-<td>
 
 ```yaml
 #ASDF 1.0.0
@@ -52,17 +48,14 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
     width: 1.0}
 ...
 ```
-
-</td>
-</tr>
-</table>
+</div>
 
 ## Features
 
 - [x] Create ASDF tag from your *pydantic* models with batteries ([converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)) included.
 - [x] Validates data models as you create them and not only when reading and writing ASDF files.
 - [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, Pydantic types)
-- <span style="color: #736f73">Comes with schemas.</span>
+- [ ] <span style="color: #736f73">Comes with schemas.</span>
 
 ## Installation
 
@@ -106,66 +99,13 @@ from mypackage.extensions import ShapeExtension
 
 asdf.get_config().register_extension(ShapeExtension)
 
-af = asdf.AsdfFile(
-    {
-        "toybox": [
-            Rectangle(width=1, height=1),
-            Rectangle(width=2, height=3),
-        ]
-    }
-)
+af = asdf.AsdfFile()
+af["rect"] = Rectangle(width=1, height=1)
 ```
 
-### Pydantic Features
+---
 
-```py
-from datetime import datetime
-from tempfile import NamedTemporaryFile
-
-import asdf
-import astropy.units as u
-from astropy.units import Quantity
-
-from asdf_pydantic import AsdfPydanticModel
-
-
-class DataPoint(AsdfPydanticModel):
-    time: datetime
-    distance: Quantity[u.m]
-
-    _tag = "asdf://asdf-pydantic/examples/tags/datapoint-1.0.0"
-
-from asdf_pydantic import AsdfPydanticConverter
-
-AsdfPydanticConverter.add_models(DataPoint)
-
-class TimeSeriesExtension():
-    extension_uri = "asdf://asdf-pydantic/examples/extensions/timeseries-1.0.0"
-    converters = [AsdfPydanticConverter()]
-    tags = [*AsdfPydanticConverter().tags]
-
-asdf.get_config().add_extension(TimeSeriesExtension())
-
-af = asdf.AsdfFile(
-    {
-        "positions": [
-                DataPoint(
-                    time="2023-01-01T00:00:00",
-                    distance=0*u.m,
-                ),
-                DataPoint(**{
-                    "time": "2023-01-01T01:00:00",
-                    "distance": 1*u.m,
-                }),
-            ]
-        )
-    }
-)
-
-with open("positions.asdf", "w", encoding="utf-8") as f:
-    af.write_to(f)
+```{toctree}
+:maxdepth: 1
+autoapi
 ```
-
-## License
-
-`asdf-pydantic` is distributed under the terms of the [BSD-3-Clause](./LICENSE) license.

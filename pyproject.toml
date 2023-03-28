@@ -39,6 +39,7 @@ Source = "https://github.com/ketozhang/asdf-pydantic"
 [tool.hatch.version]
 path = "asdf_pydantic/__version__.py"
 
+# Default Environment
 [tool.hatch.envs.default]
 dependencies = [
   "ipython",
@@ -48,10 +49,12 @@ dependencies = [
   "astropy",
   "asdf-astropy"
 ]
+
 [tool.hatch.envs.default.scripts]
 test = "pytest"
 test-cov = "test --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
 
+# Tool configs
 [tool.coverage.run]
 branch = true
 parallel = true

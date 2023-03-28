@@ -50,7 +50,7 @@ class AsdfPydanticModel(BaseModel):
             A metaschema URI, by default "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0".
             See https://asdf.readthedocs.io/en/stable/asdf/extending/schemas.html#anatomy-of-a-schema
             for more options.
-        """
+        """ # noqa: E501
         # TODO: Function signature should follow BaseModel.schema() or
         # BaseModel.schema_json()
         header = textwrap.dedent(

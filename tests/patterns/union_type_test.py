@@ -14,7 +14,7 @@ class UnionObject(AsdfPydanticModel):
 
     # Order of type matters
     int_or_str: int | str = 0
-    time: Time | datetime = datetime(2023, 1, 1)
+    datetime_or_time: datetime | Time = datetime(2023, 1, 1)
     anything: Optional[Any] = None
 
 
@@ -49,7 +49,6 @@ def test_integer_converts_to_int(tmp_path):
         {
             "obj": UnionObject(
                 int_or_str=0,
-                time=Time("2023-01-01T00:00:00"),
             )
         }
     ).write_to(tmp_path / "test.asdf")
@@ -62,28 +61,30 @@ def test_datetime_converts_to_datetime(tmp_path):
     af = asdf.AsdfFile(
         {
             "obj": UnionObject(
-                time=datetime(2023, 1, 1, 1, 0, 0),
+                datetime_or_time=datetime(2023, 1, 1, 0),
             )
         }
     )
     af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
-        assert isinstance(af["obj"].time, datetime)
+        assert isinstance(af["obj"].datetime_or_time, datetime)
 
 
 def test_Time_converts_to_Time(tmp_path):
     af = asdf.AsdfFile(
         {
             "obj": UnionObject(
-                time=Time("2023-01-01T01:00:00"),
+                datetime_or_time=Time(
+                    "2023-01-01T01:00:00", format="isot", scale="utc"
+                ),
             )
         }
     )
     af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
-        assert isinstance(af["obj"].time, Time)
+        assert isinstance(af["obj"].datetime_or_time, Time)
 
 
 @pytest.mark.parametrize(
@@ -96,7 +97,7 @@ def test_Time_converts_to_Time(tmp_path):
         # (1, 2, 3),  # Tuples are returned as list in ASDF
         [1, 2, 3],
         {1, 2, 3},
-        Time("2023-01-01T01:00:00"),
+        Time("2023-01-01T00:00:00", format="isot", scale="utc"),
         datetime(2023, 1, 1, 1, 0, 0),
     ],
 )

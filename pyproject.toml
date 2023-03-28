@@ -29,7 +29,7 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://github.com/ketozhang/asdf-pydantic#readme"
+Documentation = "https://asdf-pydantic.readthedocs.io"
 Issues = "https://github.com/ketozhang/asdf-pydantic/issues"
 Source = "https://github.com/ketozhang/asdf-pydantic"
 

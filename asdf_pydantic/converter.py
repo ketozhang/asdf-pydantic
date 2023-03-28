@@ -26,7 +26,7 @@ class AsdfPydanticConverter(Converter):
         self = _ASDF_PYDANTIC_SINGLETON_CONVERTER
 
     @classmethod
-    def register_models(
+    def add_models(
         cls, *model_classes: Type[AsdfPydanticModel]
     ) -> "AsdfPydanticConverter":
         for model_class in model_classes:

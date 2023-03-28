@@ -15,7 +15,7 @@ class UnionObject(AsdfPydanticModel):
     # Order of type matters
     int_or_str: int | str = 0
     datetime_or_time: datetime | Time = datetime(2023, 1, 1)
-    collection: list | tuple | set = tuple()
+    collection: tuple | list = tuple()
     anything: Optional[Any] = None
 
 
@@ -32,13 +32,7 @@ def setup_module():
 
 
 def test_str_converts_to_str(tmp_path):
-    af = asdf.AsdfFile(
-        {
-            "obj": UnionObject(
-                int_or_str="test",
-            )
-        }
-    )
+    af = asdf.AsdfFile({"obj": UnionObject(int_or_str="test")})
     af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
@@ -46,26 +40,14 @@ def test_str_converts_to_str(tmp_path):
 
 
 def test_integer_converts_to_int(tmp_path):
-    asdf.AsdfFile(
-        {
-            "obj": UnionObject(
-                int_or_str=0,
-            )
-        }
-    ).write_to(tmp_path / "test.asdf")
+    asdf.AsdfFile({"obj": UnionObject(int_or_str=0)}).write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
         assert isinstance(af["obj"].int_or_str, int)
 
 
 def test_datetime_converts_to_datetime(tmp_path):
-    af = asdf.AsdfFile(
-        {
-            "obj": UnionObject(
-                datetime_or_time=datetime(2023, 1, 1, 0),
-            )
-        }
-    )
+    af = asdf.AsdfFile({"obj": UnionObject(datetime_or_time=datetime(2023, 1, 1, 0))})
     af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
@@ -76,9 +58,7 @@ def test_Time_converts_to_Time(tmp_path):
     af = asdf.AsdfFile(
         {
             "obj": UnionObject(
-                datetime_or_time=Time(
-                    "2023-01-01T01:00:00", format="isot", scale="utc"
-                ),
+                datetime_or_time=Time("2023-01-01T01:00:00", format="isot", scale="utc")
             )
         }
     )
@@ -89,38 +69,30 @@ def test_Time_converts_to_Time(tmp_path):
 
 
 def list_converts_to_list(tmp_path):
-    af = asdf.AsdfFile({"obj": UnionObject(collection=[1, 2, 3])})
+    af = asdf.AsdfFile({"obj": UnionObject(collection=[1, 1, 1])})
     af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
         assert isinstance(af["obj"].collection, list)
 
 
-def tuple_convert_to_list(tmp_path):
-    """Tuples are converted to lists in ASDF."""
-    af = asdf.AsdfFile({"obj": UnionObject(collection=(1, 2, 3))})
+def test_tuple_convert_to_tuple(tmp_path):
+    af = asdf.AsdfFile({"obj": UnionObject(collection=(1, 1, 1))})
     af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
-        assert isinstance(af["obj"].collection, list)
-
-
-def set_converts_to_set(tmp_path):
-    af = asdf.AsdfFile({"obj": UnionObject(collection={1, 2, 3})})
-    af.write_to(tmp_path / "test.asdf")
-
-    with asdf.open(tmp_path / "test.asdf") as af:
-        assert isinstance(af["obj"].collection, set)
+        assert isinstance(af["obj"].collection, tuple)
 
 
 @pytest.mark.parametrize(
     "value",
     [
-        0,
-        1.0,
+        1,
+        2.0,
         "asdf",
         dict(key="value"),
         [1, 2, 3],
+        (1, 2, 3),
         {1, 2, 3},
         Time("2023-01-01T00:00:00", format="isot", scale="utc"),
         datetime(2023, 1, 1, 1, 0, 0),
@@ -131,4 +103,8 @@ def test_Any_converts_back_to_itself(value, tmp_path):
     af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
-        assert isinstance(af["obj"].anything, type(value))
+        if isinstance(value, tuple):
+            # If not specified in Pydantic, ASDF will convert tuples to list
+            assert isinstance(af["obj"].anything, list)
+        else:
+            assert isinstance(af["obj"].anything, type(value))

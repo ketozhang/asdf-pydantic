@@ -6,28 +6,21 @@ from asdf_pydantic.model import AsdfPydanticModel
 
 
 class AsdfPydanticConverter(Converter):
-    _model_class: Type[AsdfPydanticModel]
-    _tags: list[str]
-    _types: list[str]
+    _tag_to_class: dict[str, Type[AsdfPydanticModel]] = {}
 
     @property
-    def tags(self) -> list[str]:
-        return self._tags
+    def tags(self) -> tuple[str]:
+        return tuple(self._tag_to_class.keys())
 
     @property
-    def types(self) -> list[str]:
-        return self._types
+    def types(self) -> tuple[str | Type]:
+        return tuple(self._tag_to_class.values())
 
     def to_yaml_tree(self, obj: AsdfPydanticModel, tag, ctx):
         return obj.asdf_yaml_tree()
 
     def from_yaml_tree(self, node, tag, ctx):
-        return self._model_class.parse_obj(node)
-
-
-# class AsdfPydanticConverterFactory:
-#     def __call__(self, *args: Any, **kwds: Any) -> Any:
-#         pass
+        return self._tag_to_class[tag].parse_obj(node)
 
 
 def create_converter(
@@ -37,7 +30,12 @@ def create_converter(
     types: list[str]
 ) -> Converter:
     converter = AsdfPydanticConverter()
-    converter._model_class = model_class
-    converter._tags = tags or [model_class.tag_uri]  # type: ignore
-    converter._types = types  # type: ignore
+    converter._tag_to_class[model_class._tag]= model_class
     return converter
+
+
+def register_models_to_converter(
+    *model_classes: Type[AsdfPydanticModel],
+):
+    for model_class in model_classes:
+        AsdfPydanticConverter._tag_to_class[model_class._tag] = model_class

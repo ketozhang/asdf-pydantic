@@ -9,7 +9,7 @@ from asdf_pydantic import AsdfPydanticModel
 
 
 class AsdfTimeEntry(AsdfPydanticModel):
-    tag_uri = "asdf://asdf-pydantic/examples/tags/time-entry-1.0.0"
+    _tag = "asdf://asdf-pydantic/examples/tags/time-entry-1.0.0"
     time: Optional[datetime] = None
     speed: u.Quantity[u.m / u.s]
     distance: u.Quantity[u.m]

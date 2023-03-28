@@ -5,11 +5,11 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/asdf-pydantic.svg)](https://pypi.org/project/asdf-pydantic)
 -----
 
-Create ASDF tags and schemas with *pydantic* models
+Create ASDF tags with *pydantic* models.
 
 ## Features
 
-- [x] Create ASDF tag from your *pydantic* models (batteries and [converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html) included)
+- [x] Create ASDF tag from your *pydantic* models with batteries ([converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)) included.
 - [x] Validates data models as you create them and not only when reading and writing ASDF files.
 - [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, Pydantic types)
 - <span style="color: #736f73">Comes with schemas.</span>

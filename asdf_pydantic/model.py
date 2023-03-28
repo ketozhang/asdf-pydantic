@@ -14,7 +14,7 @@ class AsdfPydanticModel(BaseModel):
         AsdfPydanticModel object with py:meth`AsdfPydanticModel.parse_obj()`.
     """
 
-    tag_uri: ClassVar[str]
+    _tag: ClassVar[str]
 
     def asdf_yaml_tree(self) -> dict:
         d = {}
@@ -58,7 +58,7 @@ class AsdfPydanticModel(BaseModel):
             %YAML 1.1
             ---
             $schema: {metaschema}
-            id: {cls.tag_uri}
+            id: {cls._tag}
 
             """
         )

@@ -5,9 +5,8 @@ import jsonschema
 import pydantic
 import pytest
 import yaml
-from asdf.extension import Extension, TagDefinition
+from asdf.extension import TagDefinition
 
-from asdf_pydantic.converter import create_converter
 from asdf_pydantic.examples.extensions import ExampleExtension
 from asdf_pydantic.examples.shapes import AsdfRectangle
 from asdf_pydantic.examples.tree import AsdfNode
@@ -16,7 +15,7 @@ from asdf_pydantic.examples.tree import AsdfNode
 class TestExtension(ExampleExtension):
     tags = [  # type: ignore
         TagDefinition(
-            AsdfRectangle.tag_uri,
+            AsdfRectangle._tag,
             schema_uris="asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0",
         )
     ]
@@ -26,8 +25,8 @@ def setup_module():
     asdf.get_config().add_extension(TestExtension())
     asdf.get_config().add_resource_mapping(
         {
-            "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": AsdfRectangle.schema_asdf().encode(
-                "utf-8"
+            "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": (
+                AsdfRectangle.schema_asdf().encode("utf-8")
             )
         }
     )
@@ -130,4 +129,4 @@ def test_given_child_field_contains_asdf_object_then_schema_has_child_tag():
 
     child_schema = schema["definitions"]["AsdfNode"]["properties"]["child"]
 
-    assert {"tag": AsdfNode.tag_uri} in child_schema["anyOf"]
+    assert {"tag": AsdfNode._tag} in child_schema["anyOf"]

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from asdf.extension import Extension
 
 from asdf_pydantic.converter import AsdfPydanticConverter
@@ -14,4 +16,5 @@ class ExampleExtension(Extension):
 
 
 def get_extensions() -> list[Extension]:
+    return [ExampleExtension()]
     return [ExampleExtension()]

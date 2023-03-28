@@ -15,6 +15,7 @@ class UnionObject(AsdfPydanticModel):
     # Order of type matters
     int_or_str: int | str = 0
     datetime_or_time: datetime | Time = datetime(2023, 1, 1)
+    collection: list | tuple | set = tuple()
     anything: Optional[Any] = None
 
 
@@ -87,6 +88,31 @@ def test_Time_converts_to_Time(tmp_path):
         assert isinstance(af["obj"].datetime_or_time, Time)
 
 
+def list_converts_to_list(tmp_path):
+    af = asdf.AsdfFile({"obj": UnionObject(collection=[1, 2, 3])})
+    af.write_to(tmp_path / "test.asdf")
+
+    with asdf.open(tmp_path / "test.asdf") as af:
+        assert isinstance(af["obj"].collection, list)
+
+
+def tuple_convert_to_list(tmp_path):
+    """Tuples are converted to lists in ASDF."""
+    af = asdf.AsdfFile({"obj": UnionObject(collection=(1, 2, 3))})
+    af.write_to(tmp_path / "test.asdf")
+
+    with asdf.open(tmp_path / "test.asdf") as af:
+        assert isinstance(af["obj"].collection, list)
+
+
+def set_converts_to_set(tmp_path):
+    af = asdf.AsdfFile({"obj": UnionObject(collection={1, 2, 3})})
+    af.write_to(tmp_path / "test.asdf")
+
+    with asdf.open(tmp_path / "test.asdf") as af:
+        assert isinstance(af["obj"].collection, set)
+
+
 @pytest.mark.parametrize(
     "value",
     [
@@ -94,7 +120,6 @@ def test_Time_converts_to_Time(tmp_path):
         1.0,
         "asdf",
         dict(key="value"),
-        # (1, 2, 3),  # Tuples are returned as list in ASDF
         [1, 2, 3],
         {1, 2, 3},
         Time("2023-01-01T00:00:00", format="isot", scale="utc"),

@@ -11,7 +11,6 @@ Create ASDF tags with *pydantic* models.
 <td>
 
 ```py
-# mypackage/shapes.py
 from asdf_pydantic import AsdfPydanticModel
 
 class Rectangle(AsdfPydanticModel):
@@ -20,14 +19,8 @@ class Rectangle(AsdfPydanticModel):
 
 # After creating extension and install ...
 
-af = asdf.AsdfFile(
-    {
-        "toybox": [
-            Rectangle(width=1, height=1),
-            Rectangle(width=2, height=3),
-        ]
-    }
-)
+af = asdf.AsdfFile()
+af["rect"] = Rectangle(width=1, height=1)
 ```
 
 </td>
@@ -54,13 +47,9 @@ history:
   - !core/extension_metadata-1.0.0 {
     extension_class: mypackage.shapes.ShapesExtension,
     extension_uri: 'asdf://asdf-pydantic/shapes/extensions/shapes-1.0.0'}
-toybox:
-- !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
+rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
     height: 1.0,
     width: 1.0}
-- !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
-    height: 3.0,
-    width: 2.0}
 ...
 ```
 

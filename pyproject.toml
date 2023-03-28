@@ -40,7 +40,6 @@ path = "asdf_pydantic/__version__.py"
 
 # Default Environment
 [tool.hatch.envs.default]
-python = "3.9"
 dependencies = [
   "ipython",
   "pytest",

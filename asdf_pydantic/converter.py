@@ -1,6 +1,6 @@
 from typing import Type
 
-from asdf.extension import Converter, TagDefinition
+from asdf.extension import Converter
 
 from asdf_pydantic.model import AsdfPydanticModel
 
@@ -23,19 +23,14 @@ class AsdfPydanticConverter(Converter):
         return self._tag_to_class[tag].parse_obj(node)
 
 
-def create_converter(
-    model_class: Type[AsdfPydanticModel],
-    *,
-    tags: list[str | TagDefinition] | None = None,
-    types: list[str]
-) -> Converter:
+def create_converter(model_class: Type[AsdfPydanticModel]) -> AsdfPydanticConverter:
     converter = AsdfPydanticConverter()
-    converter._tag_to_class[model_class._tag]= model_class
+    converter._tag_to_class[model_class._tag] = model_class
     return converter
 
 
 def register_models_to_converter(
     *model_classes: Type[AsdfPydanticModel],
-):
+) -> None:
     for model_class in model_classes:
         AsdfPydanticConverter._tag_to_class[model_class._tag] = model_class

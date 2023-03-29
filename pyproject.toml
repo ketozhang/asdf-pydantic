@@ -53,6 +53,17 @@ dependencies = [
 test = "pytest {args}"
 test-cov = "test --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
 
+[tool.hatch.envs.docs]
+dependencies = [
+  "sphinx",
+  "sphinx-autoapi",
+  "sphinx-book-theme",
+  "myst-parser"
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -b html docs docs/_build/html {args}"
+
 # Tool configs
 [tool.coverage.run]
 branch = true

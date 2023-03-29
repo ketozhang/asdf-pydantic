@@ -68,7 +68,7 @@ An ASDF field type is a Python type that can be serialized to a YAML file. These
   ```
   Because both `Office` and `Employees` are `AsdfPydanticModel`, both are
   referenced by their tags.
-- A subtype of `pydantic.BaseModel`:
+- A subtype of [`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/):
   ```py
   from pydantic import BaseModel
 
@@ -91,8 +91,8 @@ An ASDF field type is a Python type that can be serialized to a YAML file. These
 
 ### Custom field type
 
-You can define your own custom types so that they may satisfy any criteria defined the above section.
-You have a few options depending on your type
+You can define your own custom types in any way so that they would satisfy a
+[ASDF field type](#asdf-field-type). Here list a few options:
 
 1. Create a tagged ASDF type classically (involves defining a custom ASDF Converter
 and extension).

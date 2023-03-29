@@ -17,4 +17,3 @@ class ExampleExtension(Extension):
 
 def get_extensions() -> list[Extension]:
     return [ExampleExtension()]
-    return [ExampleExtension()]

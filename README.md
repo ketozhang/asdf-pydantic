@@ -7,7 +7,7 @@
 
 Create ASDF tags with *pydantic* models.
 
-<div style="width: 66vw; margin:auto;">
+<div style="width: 33vw; min-width: 50em; max-width: 70em; margin:auto;">
 
 ```py
 from asdf_pydantic import AsdfPydanticModel
@@ -57,8 +57,8 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
 - [x] Create ASDF tag from your *pydantic* models with batteries ([converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)) included.
 - [x] Validates data models as you create them and not only when reading and writing ASDF files.
 - [x] Preserve Python types when deserializing ASDF files.
-- [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types)
-- [ ] <span style="color: #736f73">Comes with schemas.</span>
+- [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types).
+- [ ] <span style="color: #757575!important">Comes with ASDF schemas (TBD).</span>
 
 ## Installation
 
@@ -68,7 +68,8 @@ pip install asdf-pydantic
 
 ## Usage
 
-Define your data model
+Define your data model with `AsdfPydanticModel`. For *pydantic* fans, this has
+all the features of pydantic's BaseModel.
 ```py
 # mypackage/shapes.py
 from asdf_pydantic import AsdfPydanticModel
@@ -115,5 +116,6 @@ with open("shapes.asdf", "wb") as fp:
 
 ```{toctree}
 :maxdepth: 1
+model
 autoapi
 ```

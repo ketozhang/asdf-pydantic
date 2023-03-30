@@ -1,0 +1,2 @@
+"""My module"""
+import os

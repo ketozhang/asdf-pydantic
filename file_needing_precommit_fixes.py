@@ -1,2 +1,1 @@
 """My module"""
-import os

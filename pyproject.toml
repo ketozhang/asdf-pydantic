@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "asdf>=2",
+  "asdf>=2,<3",
   "pydantic>=1,<2",
 ]
 dynamic = ["version"]

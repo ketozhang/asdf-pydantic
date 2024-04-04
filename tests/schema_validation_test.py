@@ -1,7 +1,6 @@
 from tempfile import NamedTemporaryFile
 
 import asdf
-import jsonschema
 import pydantic
 import pytest
 import yaml
@@ -117,7 +116,7 @@ rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width:
         # HACK: It is better that the ASDF's schema validation fails before
         # the pydantic's. However, it seems ASDF deserialize first then do their
         # validation.
-        with pytest.raises((jsonschema.ValidationError, pydantic.ValidationError)):
+        with pytest.raises((asdf.exceptions.ValidationError, pydantic.ValidationError)):
             asdf.open(tempfile.name)
 
 

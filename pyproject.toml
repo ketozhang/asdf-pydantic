@@ -18,12 +18,13 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "asdf>=2,<3",
-  "pydantic>=1,<2",
+  "asdf>=3",
+  "pydantic>=2",
 ]
 dynamic = ["version"]
 

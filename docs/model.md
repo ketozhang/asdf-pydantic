@@ -1,11 +1,10 @@
 ```{currentmodule} asdf_pydantic
 ```
-# ASDF Pydantic Model
+# Writing ASDF Models to define tagged objects
 
-The {py:class}`AsdfPydanticModel` is a data model
-[`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/) that is readily
-serializable to ASDF.
-
+The {py:class}`AsdfPydanticModel` is a class that combines the feature of
+[`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/) and ASDF 
+to be readily serializable an tagged object in ASDF.
 
 ```py
 class Rectangle(AsdfPydanticModel):
@@ -15,10 +14,11 @@ class Rectangle(AsdfPydanticModel):
     height: float
 ```
 
-`_tag` is a globally unique **ASDF tag** (see [naming best
+This `Rectangle` model will be referenced in ASDF's YAML file as `!rectangle-1.0.0` 
+specified by the `_tag` field. `_tag` is a globally unique ASDF tag (see [naming best
 practices](https://asdf.readthedocs.io/en/stable/asdf/extending/uris.html#tags))
-that identifies the data model. This model contains two **fields**: `width` and
-`height` and their **field type** are both `float`.
+that identifies the ASDF model. This model contains two fields: `width` and
+`height` and their field type are both `float`.
 
 ## Field Types
 

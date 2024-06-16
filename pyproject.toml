@@ -47,7 +47,8 @@ dependencies = [
   "pytest-cov",
   "ipython",
   "astropy",
-  "asdf-astropy"
+  "asdf-astropy",
+  "black"
 ]
 
 [tool.hatch.envs.default.scripts]

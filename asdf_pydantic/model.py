@@ -1,8 +1,11 @@
 import textwrap
-from typing import ClassVar
+from typing import Any, ClassVar
 
+import numpy as np
 import yaml
-from pydantic import BaseModel
+from asdf.tags.core import NDArrayType
+from numpy.typing import NDArray
+from pydantic import BaseModel, ValidationInfo, field_validator
 
 
 class AsdfPydanticModel(BaseModel):
@@ -67,3 +70,14 @@ class AsdfPydanticModel(BaseModel):
         )
         body = yaml.dump(cls.schema())
         return header + body
+
+    @field_validator("*", mode="before")
+    @classmethod
+    def _allow_asdf_NDArrayType_to_be_ndarray(
+        cls, value: Any, info: ValidationInfo
+    ) -> Any | NDArray:
+        """Before Pydantic validation, convert ASDF `NDArrayType` to numpy `NDArray`."""
+        if not isinstance(value, NDArrayType):
+            return value
+
+        return np.asarray(value)

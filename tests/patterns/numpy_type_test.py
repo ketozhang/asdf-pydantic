@@ -37,12 +37,13 @@ def test_convert_ArrayContainer_to_asdf(tmp_path):
     """When writing ArrayContainer to an ASDF file, the array field should be
     serialized to the original numpy array.
     """
-    af = asdf.AsdfFile({"data": ArrayContainer(array=np.array([1, 2, 3]))}).write_to(
-        tmp_path / "test.asdf"
-    )
+    data = ArrayContainer(array=np.array([1, 2, 3]))
+    af = asdf.AsdfFile({"data": data})
+    af.write_to(tmp_path / "test.asdf")
 
     with asdf.open(tmp_path / "test.asdf") as af:
-        assert isinstance(af.tree["array"], np.ndarray), (
-            f"Expected {type(np.ndarray)}, " f"got {type(af.tree['array'])}"
+        breakpoint()
+        assert isinstance(af.tree["data"], np.ndarray), (
+            f"Expected {type(np.ndarray)}, " f"got {type(af.tree['data'])}"
         )
-        assert np.all(af.tree["array"] == np.array([1, 2, 3]))
+        assert np.all(af.tree["data"] == np.array([1, 2, 3]))

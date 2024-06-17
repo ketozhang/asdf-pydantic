@@ -8,6 +8,11 @@ on:
     types:
       - created
   workflow_dispatch:
+    inputs:
+      prerelease:
+        type: boolean
+        description: 'Create a GitHub Release with prerelease tag'
+        default: false
 
 jobs:
   publish:
@@ -31,7 +36,7 @@ jobs:
     - name: Build
       run: hatch build
     - name: Create GitHub Release (prerelease only)
-      if: github.event.push
+      if: github.event.push || github.event.workflow_dispatch.inputs.prerelease
       uses: softprops/action-gh-release@v1
       with:
         prerelease: true

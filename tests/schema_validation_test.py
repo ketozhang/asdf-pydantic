@@ -1,28 +1,30 @@
 from tempfile import NamedTemporaryFile
 
 import asdf
-import jsonschema
 import pydantic
 import pytest
 import yaml
-from asdf.extension import TagDefinition
+from asdf.extension import Extension
+from asdf_pydantic import AsdfPydanticConverter
 
-from asdf_pydantic.examples.extensions import ExampleExtension
 from asdf_pydantic.examples.shapes import AsdfRectangle
 from asdf_pydantic.examples.tree import AsdfNode
 
 
-class TestExtension(ExampleExtension):
-    tags = [  # type: ignore
-        TagDefinition(
-            AsdfRectangle._tag,
-            schema_uris="asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0",
-        )
-    ]
-
-
 def setup_module():
-    asdf.get_config().add_extension(TestExtension())
+    AsdfPydanticConverter.add_models(AsdfRectangle)
+
+    class TestExtension(Extension):
+        extension_uri = "asdf://asdf-pydantic/examples/extensions/test-1.0.0"  # type: ignore
+
+        tags = [*AsdfPydanticConverter().tags]  # type: ignore
+        converters = [AsdfPydanticConverter()]  # type: ignore
+
+    # HACK: The schema URI should be referenced from `AsdfRectangle._schema`.
+    # Then there should be a way to automatically add the schema to ASDF
+    # resources perhaps during AsdfPydanticConverter.add_models(). Further
+    # abstracting can be done later, perhaps defining a
+    # AsdfPydanticExtension.
     asdf.get_config().add_resource_mapping(
         {
             "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": (
@@ -30,6 +32,7 @@ def setup_module():
             )
         }
     )
+    asdf.get_config().add_extension(TestExtension())
 
 
 def test_schema_exists_and_valid():
@@ -117,7 +120,7 @@ rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width:
         # HACK: It is better that the ASDF's schema validation fails before
         # the pydantic's. However, it seems ASDF deserialize first then do their
         # validation.
-        with pytest.raises((jsonschema.ValidationError, pydantic.ValidationError)):
+        with pytest.raises((asdf.ValidationError, pydantic.ValidationError)):
             asdf.open(tempfile.name)
 
 

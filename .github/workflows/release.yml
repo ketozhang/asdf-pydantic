@@ -29,7 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install hatch
         hatch env create
-        echo "ASDF_PYDANTIC_VERSION=$(hatch version)" >> $GITHUB_ENV
+        echo "ASDF_PYDANTIC_VERSION=$(hatch version | sed 's/+g.*$//g')" >> $GITHUB_ENV
     - name: Build
       run: hatch build
     - name: Create GitHub Release (prerelease only)

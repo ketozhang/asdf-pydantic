@@ -5,7 +5,7 @@ import jsonschema
 import pydantic
 import pytest
 import yaml
-from asdf.extension import TagDefinition
+from asdf.extension import Extension
 
 from asdf_pydantic.examples.extensions import ExampleExtension
 from asdf_pydantic.examples.shapes import AsdfRectangle
@@ -117,7 +117,7 @@ rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width:
         # HACK: It is better that the ASDF's schema validation fails before
         # the pydantic's. However, it seems ASDF deserialize first then do their
         # validation.
-        with pytest.raises((jsonschema.ValidationError, pydantic.ValidationError)):
+        with pytest.raises((asdf.ValidationError, pydantic.ValidationError)):
             asdf.open(tempfile.name)
 
 

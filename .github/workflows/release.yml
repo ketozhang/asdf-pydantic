@@ -37,7 +37,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         prerelease: true
-        tag: ${{ env.ASDF_PYDANTIC_VERSION }}
+        tag_name: ${{ env.ASDF_PYDANTIC_VERSION }}
         files: dist/*
         generate_release_notes: true
     - name: Publish package distributions to PyPI

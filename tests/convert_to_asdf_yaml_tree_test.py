@@ -21,5 +21,5 @@ def test_given_mix_child_is_mix_of_AsdfNode_and_Node():
     }
 
     assert AsdfNode(child=Node(child=AsdfNode())).asdf_yaml_tree() == {
-        "child": {"child": AsdfNode()}
+        "child": {"child": {"child": None}}
     }

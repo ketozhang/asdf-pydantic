@@ -22,7 +22,7 @@ def setup_module():
     asdf.get_config().add_extension(TestExtension())
 
 
-def test_can_write_with_subclass_model(tmp_path):
+def test_can_deserialize_ndarray_when_nonlazy_load(tmp_path):
     data = Data(array=np.array([1, 2, 3]))
 
     af = asdf.AsdfFile({"data": data})

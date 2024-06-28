@@ -2,7 +2,6 @@ from typing import ClassVar
 
 import yaml
 from pydantic import BaseModel
-from pydantic.json_schema import GenerateJsonSchema
 from typing_extensions import deprecated
 
 from asdf_pydantic.schema import DEFAULT_ASDF_SCHEMA_REF_TEMPLATE, GenerateAsdfSchema

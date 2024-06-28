@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic.json_schema import GenerateJsonSchema
 
 DEFAULT_ASDF_SCHEMA_REF_TEMPLATE = "#/definitions/{model}"
@@ -14,14 +16,14 @@ class GenerateAsdfSchema(GenerateJsonSchema):
     """
 
     # HACK: When we can support tree models, then not all schema should have tag
-    tag: str | None
+    tag: Optional[str]
     schema_dialect = "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
 
     def __init__(
         self,
         by_alias: bool = True,
         ref_template: str = DEFAULT_ASDF_SCHEMA_REF_TEMPLATE,
-        tag: str | None = None,
+        tag: Optional[str] = None,
     ):
         super().__init__(by_alias=by_alias, ref_template=ref_template)
         self.tag = tag

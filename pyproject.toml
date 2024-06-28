@@ -25,7 +25,8 @@ classifiers = [
 dependencies = [
   "asdf>=3",
   "pydantic>=2",
-  "numpy>=1.25"
+  "numpy>=1.25",
+  "numpy<2;python_version<'3.10'",
 ]
 dynamic = ["version"]
 
@@ -63,13 +64,20 @@ matrix-name-format = "{variable}={value}"
 test = "pytest {args}"
 
 [[tool.hatch.envs.test.matrix]]
-python = ["3.9", "3.10", "3.11", "3.12"]
+# Only test with numpy v1 on Python 3.9
+python = ["3.9"]
+numpy-version = ["1"]
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.10", "3.11", "3.12"]
 numpy-version = ["1", "2"]
+
 
 [tool.hatch.envs.test.overrides]
 matrix.numpy-version.dependencies = [
   { value = "numpy>=1,<2", if = ["1"] },
   { value = "numpy>=2,<3", if = ["2"] },
+  { value = "astropy>=6.1", if = ["2"] },
 ]
 
 [tool.hatch.envs.docs]

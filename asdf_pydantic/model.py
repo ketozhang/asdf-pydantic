@@ -1,8 +1,11 @@
-import textwrap
 from typing import ClassVar
 
 import yaml
 from pydantic import BaseModel
+from pydantic.json_schema import GenerateJsonSchema
+from typing_extensions import deprecated
+
+from asdf_pydantic.schema import DEFAULT_ASDF_SCHEMA_REF_TEMPLATE, GenerateAsdfSchema
 
 
 class AsdfPydanticModel(BaseModel):
@@ -60,10 +63,15 @@ class AsdfPydanticModel(BaseModel):
         header = "%YAML 1.1\n---\n"
 
         return f"{header}\n{yaml.safe_dump(json_schema)}"
+
+    @classmethod
+    @deprecated(
+        "The `schema_asdf` method is deprecated; use `model_asdf_schema` instead."
+    )
     def schema_asdf(
         cls,
         *,
-        metaschema: str = "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0",
+        metaschema: str = GenerateAsdfSchema.schema_dialect,
         **kwargs,
     ) -> str:
         """Get the ASDF schema definition for this model.
@@ -71,18 +79,11 @@ class AsdfPydanticModel(BaseModel):
         Parameters
         ----------
         metaschema, optional
-            A metaschema URI, by default "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0".
-            See https://asdf.readthedocs.io/en/stable/asdf/extending/schemas.html#anatomy-of-a-schema
-            for more options.
+            A metaschema URI
         """  # noqa: E501
-        header = textwrap.dedent(
-            f"""
-            %YAML 1.1
-            ---
-            $schema: {metaschema}
-            id: {cls._tag}
+        if metaschema != GenerateAsdfSchema.schema_dialect:
+            raise NotImplementedError(
+                f"Only {GenerateAsdfSchema.schema_dialect} is supported as metaschema."
+            )
 
-            """
-        )
-        body = yaml.dump(cls.schema())
-        return header + body
+        return cls.model_asdf_schema(**kwargs)

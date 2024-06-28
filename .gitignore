@@ -122,6 +122,9 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
+# ruff
+.ruff_cache/
+
 # mkdocs documentation
 /site
 

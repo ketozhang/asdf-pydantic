@@ -62,8 +62,9 @@ class AsdfPydanticModel(BaseModel):
             ---
             $schema: {metaschema}
             id: {cls._tag}
+            tag: tag:{cls._tag.split('://', maxsplit=2)[-1]}
 
             """
         )
-        body = yaml.dump(cls.schema())
+        body = yaml.safe_dump(cls.model_json_schema())
         return header + body

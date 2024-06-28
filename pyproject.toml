@@ -64,12 +64,18 @@ test = "pytest {args}"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["3.9", "3.10", "3.11", "3.12"]
-numpy-version = ["1", "2"]
+numpy = ["1", "2"]
+asdf = ["3", "non_lazy_ndarray"]
 
 [tool.hatch.envs.test.overrides]
-matrix.numpy-version.dependencies = [
+matrix.numpy.dependencies = [
   { value = "numpy>=1,<2", if = ["1"] },
   { value = "numpy>=2,<3", if = ["2"] },
+]
+
+matrix.asdf.dependencies = [
+  { value = "asdf>=3,<4", if = ["latest"] },
+  { value = "asdf@git+https://github.com/braingram/asdf.git@non_lazy_ndarray", if = ["non_lazy_ndarray"] },
 ]
 
 [tool.hatch.envs.docs]

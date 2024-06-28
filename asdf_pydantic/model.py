@@ -66,5 +66,5 @@ class AsdfPydanticModel(BaseModel):
 
             """
         )
-        body = yaml.dump(cls.schema())
+        body = yaml.safe_dump(cls.model_json_schema())
         return header + body

@@ -1,6 +1,8 @@
 import asdf
+import pytest
 from asdf.extension import Extension
 from asdf.schema import check_schema, load_schema
+from yaml.scanner import ScannerError
 
 from asdf_pydantic import AsdfPydanticConverter
 from asdf_pydantic.examples.shapes import AsdfRectangle
@@ -23,7 +25,7 @@ def setup_module():
     asdf.get_config().add_resource_mapping(
         {
             "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": (
-                AsdfRectangle.schema_asdf().encode("utf-8")
+                AsdfRectangle.model_asdf_schema().encode("utf-8")
             )
         }
     )
@@ -31,9 +33,11 @@ def setup_module():
 
 
 def test_schema():
-    schema = load_schema("asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0")
-
-    check_schema(schema)
+    try:
+        schema = load_schema("asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0")
+        check_schema(schema)
+    except ScannerError as e:
+        pytest.fail(f"{e}\n{AsdfRectangle.model_asdf_schema()}")
 
     assert schema["$schema"] == "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
     assert schema["title"] == "AsdfRectangle"

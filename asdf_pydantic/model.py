@@ -62,6 +62,7 @@ class AsdfPydanticModel(BaseModel):
             ---
             $schema: {metaschema}
             id: {cls._tag}
+            tag: tag:{cls._tag.split('://', maxsplit=2)[-1]}
 
             """
         )

@@ -70,8 +70,8 @@ numpy-version = ["1"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["3.10", "3.11", "3.12"]
-numpy = ["1", "2"]
-asdf = ["3", "non_lazy_ndarray"]
+numpy = ["2", "1"]
+asdf = ["non_lazy_ndarray", "3"]
 
 [tool.hatch.envs.test.overrides]
 matrix.numpy.dependencies = [

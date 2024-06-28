@@ -1,8 +1,10 @@
-import textwrap
 from typing import ClassVar
 
 import yaml
 from pydantic import BaseModel
+from typing_extensions import deprecated
+
+from asdf_pydantic.schema import DEFAULT_ASDF_SCHEMA_REF_TEMPLATE, GenerateAsdfSchema
 
 
 class AsdfPydanticModel(BaseModel):
@@ -42,29 +44,45 @@ class AsdfPydanticModel(BaseModel):
         return d
 
     @classmethod
+    def model_asdf_schema(
+        cls,
+        by_alias: bool = True,
+        ref_template: str = DEFAULT_ASDF_SCHEMA_REF_TEMPLATE,
+        schema_generator: type[GenerateAsdfSchema] = GenerateAsdfSchema,
+    ):
+        """Get the ASDF schema definition for this model."""
+        # Implementation follows closely with the `BaseModel.model_json_schema`
+        schema_generator_instance = schema_generator(
+            by_alias=by_alias,
+            ref_template=ref_template,
+            tag=cls._tag,
+        )
+        json_schema = schema_generator_instance.generate(cls.__pydantic_core_schema__)
+
+        header = "%YAML 1.1\n---\n"
+
+        return f"{header}\n{yaml.safe_dump(json_schema)}"
+
+    @classmethod
+    @deprecated(
+        "The `schema_asdf` method is deprecated; use `model_asdf_schema` instead."
+    )
     def schema_asdf(
-        cls, *, metaschema: str = "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
+        cls,
+        *,
+        metaschema: str = GenerateAsdfSchema.schema_dialect,
+        **kwargs,
     ) -> str:
         """Get the ASDF schema definition for this model.
 
         Parameters
         ----------
         metaschema, optional
-            A metaschema URI, by default "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0".
-            See https://asdf.readthedocs.io/en/stable/asdf/extending/schemas.html#anatomy-of-a-schema
-            for more options.
+            A metaschema URI
         """  # noqa: E501
-        # TODO: Function signature should follow BaseModel.schema() or
-        # BaseModel.schema_json()
-        header = textwrap.dedent(
-            f"""
-            %YAML 1.1
-            ---
-            $schema: {metaschema}
-            id: {cls._tag}
-            tag: tag:{cls._tag.split('://', maxsplit=2)[-1]}
+        if metaschema != GenerateAsdfSchema.schema_dialect:
+            raise NotImplementedError(
+                f"Only {GenerateAsdfSchema.schema_dialect} is supported as metaschema."
+            )
 
-            """
-        )
-        body = yaml.safe_dump(cls.model_json_schema())
-        return header + body
+        return cls.model_asdf_schema(**kwargs)

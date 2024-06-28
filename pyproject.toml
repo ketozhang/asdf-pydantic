@@ -25,6 +25,7 @@ classifiers = [
 dependencies = [
   "asdf>=3",
   "pydantic>=2",
+  "numpy>=1.25"
 ]
 dynamic = ["version"]
 
@@ -53,6 +54,22 @@ dependencies = [
 [tool.hatch.envs.default.scripts]
 test = "pytest {args}"
 test-cov = "test --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
+
+[tool.hatch.envs.test]
+template = "default"
+matrix-name-format = "{variable}={value}"
+
+[tool.hatch.envs.test.scripts]
+test = "pytest {args}"
+
+[[tool.hatch.envs.test.matrix]]
+numpy-version = ["1", "2"]
+
+[tool.hatch.envs.test.overrides]
+matrix.numpy-version.dependencies = [
+  { value = "numpy>=1,<2", if = ["1"] },
+  { value = "numpy>=2,<3", if = ["2"] },
+]
 
 [tool.hatch.envs.docs]
 dependencies = [

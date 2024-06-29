@@ -4,6 +4,10 @@ on:
   release: # On create a GitHub Release
     types:
       - created
+  push:
+    tags:
+      # Prerelease tags
+      - "v[0-9]+.[0-9]+.[0-9]+.[a-z]+*"
   workflow_dispatch:
 
 jobs:

@@ -7,7 +7,7 @@ on:
   push:
     tags:
       # Prerelease tags
-      - "v[0-9]+.[0-9]+.[0-9]+.[a-z]+*"
+      - "v[0-9]+.[0-9]+.[0-9]+.*"
   workflow_dispatch:
 
 jobs:

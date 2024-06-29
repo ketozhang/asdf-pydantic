@@ -1,13 +1,10 @@
 name: Release package
 
 on:
-  release: # On create a GitHub Release
-    types:
-      - created
   push:
     tags:
-      # Prerelease tags
-      - "v[0-9]+.[0-9]+.[0-9]+.*"
+      - "v1.*"
+      - "v2.*"
   workflow_dispatch:
 
 jobs:

@@ -1,7 +1,7 @@
 from typing import ClassVar
 
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing_extensions import deprecated
 
 from asdf_pydantic.schema import DEFAULT_ASDF_SCHEMA_REF_TEMPLATE, GenerateAsdfSchema
@@ -17,9 +17,7 @@ class AsdfPydanticModel(BaseModel):
     """
 
     _tag: ClassVar[str]
-
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def asdf_yaml_tree(self) -> dict:
         d = {}
@@ -59,9 +57,7 @@ class AsdfPydanticModel(BaseModel):
         )
         json_schema = schema_generator_instance.generate(cls.__pydantic_core_schema__)
 
-        header = "%YAML 1.1\n---\n"
-
-        return f"{header}\n{yaml.safe_dump(json_schema)}"
+        return f"%YAML 1.1\n---\n{yaml.safe_dump(json_schema)}"
 
     @classmethod
     @deprecated(

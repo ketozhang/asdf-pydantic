@@ -1,6 +1,7 @@
 from typing import ClassVar
 
 import yaml
+from asdf.extension import TagDefinition
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import deprecated
 
@@ -16,7 +17,7 @@ class AsdfPydanticModel(BaseModel):
         AsdfPydanticModel object with py:meth`AsdfPydanticModel.parse_obj()`.
     """
 
-    _tag: ClassVar[str]
+    _tag: ClassVar[str | TagDefinition]
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def asdf_yaml_tree(self) -> dict:
@@ -42,6 +43,22 @@ class AsdfPydanticModel(BaseModel):
         return d
 
     @classmethod
+    def get_tag_definition(cls):
+        if isinstance(cls._tag, str):
+            return TagDefinition(  # TODO: Add title and description
+                cls._tag,
+                schema_uris=[f"{cls._tag}/schema"],
+            )
+        return cls._tag
+
+    @classmethod
+    def get_tag_uri(cls):
+        if isinstance(cls._tag, TagDefinition):
+            return cls._tag.tag_uri
+        else:
+            return cls._tag
+
+    @classmethod
     def model_asdf_schema(
         cls,
         by_alias: bool = True,
@@ -51,9 +68,7 @@ class AsdfPydanticModel(BaseModel):
         """Get the ASDF schema definition for this model."""
         # Implementation follows closely with the `BaseModel.model_json_schema`
         schema_generator_instance = schema_generator(
-            by_alias=by_alias,
-            ref_template=ref_template,
-            tag=cls._tag,
+            by_alias=by_alias, ref_template=ref_template, tag_uri=cls.get_tag_uri()
         )
         json_schema = schema_generator_instance.generate(cls.__pydantic_core_schema__)
 

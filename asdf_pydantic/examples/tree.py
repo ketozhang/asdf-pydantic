@@ -11,7 +11,7 @@ class Node(BaseModel):
     child: Optional[Node] = None
 
 
-class AsdfNode(Node, AsdfPydanticModel):
-    _tag = "asdf://asdf-pydantic/examples/tags/node-1.0.0"
+class AsdfTreeNode(Node, AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/tree-node-1.0.0"
 
-    child: Optional[Union[AsdfNode, Node]] = None
+    child: Optional[Union[AsdfTreeNode, Node]] = None

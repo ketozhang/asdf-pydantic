@@ -3,6 +3,17 @@ from typing import Optional
 from pydantic.json_schema import GenerateJsonSchema
 
 DEFAULT_ASDF_SCHEMA_REF_TEMPLATE = "#/definitions/{model}"
+DESIRED_ASDF_SCHEMA_KEY_ORDER = (
+    "$schema",
+    "id",
+    "title",
+    "type",
+    "properties",
+    "allOf",
+    "anyOf",
+    "required",
+    "$defs",
+)
 
 
 class GenerateAsdfSchema(GenerateJsonSchema):
@@ -32,8 +43,17 @@ class GenerateAsdfSchema(GenerateJsonSchema):
 
         if self.tag_uri:
             json_schema["$schema"] = self.schema_dialect
-            json_schema["id"] = self.tag_uri
-            json_schema["tag"] = f"tag:{self.tag_uri.split('://', maxsplit=2)[-1]}"
+            json_schema["id"] = f"{self.tag_uri}/schema"
+
+        # Order keys
+        json_schema = {
+            **{
+                key: json_schema[key]
+                for key in DESIRED_ASDF_SCHEMA_KEY_ORDER
+                if key in json_schema
+            },
+            **json_schema,  # Rest of the keys not in order list
+        }
 
         # TODO: Convert jsonschema 2020-12 to ASDF schema
         return json_schema

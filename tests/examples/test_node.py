@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import textwrap
+from unittest.mock import MagicMock, patch
 
 import asdf
 import asdf.exceptions
@@ -86,8 +87,9 @@ def test_can_write_valid_asdf_file(tmp_path):
 
 
 @pytest.mark.usefixtures("asdf_extension")
+@patch.object(AsdfNode, "model_validate", MagicMock())  # Ignore pydantic validation
 def test_errors_reading_invalid_asdf_file(tmp_path):
-    """Tests validation fails when ASDF file does not match the schema."""
+    """Tests ASDF validation fails when ASDF file does not match the schema."""
     content = """\
         #ASDF 1.0.0
         #ASDF_STANDARD 1.5.0
@@ -109,8 +111,8 @@ def test_errors_reading_invalid_asdf_file(tmp_path):
             child: None
         ...
     """
-    with open(tmp_path / "test.asdf", "wb") as f:
-        f.write(textwrap.dedent(content).encode("utf-8"))
+    with open(tmp_path / "test.asdf", "w") as f:
+        f.write(textwrap.dedent(content))
 
     with pytest.raises(asdf.exceptions.ValidationError):
         with asdf.open(tmp_path / "test.asdf") as af:

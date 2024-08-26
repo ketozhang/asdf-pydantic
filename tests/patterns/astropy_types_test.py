@@ -35,7 +35,7 @@ def setup_module():
 
 
 def test_convert_DataPoint_to_asdf(tmp_path):
-    af = asdf.AsdfFile(
+    asdf.AsdfFile(
         {
             "positions": [
                 DataPoint(
@@ -57,7 +57,7 @@ def test_convert_DataPoint_to_asdf(tmp_path):
 
 
 def test_convert_DataContainer_to_asdf(tmp_path):
-    af = asdf.AsdfFile(
+    asdf.AsdfFile(
         {
             "container": DataContainer(
                 positions=[

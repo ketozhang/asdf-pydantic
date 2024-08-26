@@ -107,7 +107,7 @@ def test_errors_reading_invalid_asdf_file(tmp_path):
                 software: !core/software-1.0.0 {name: asdf, version: 3.4.0}
             - !core/extension_metadata-1.0.0 {extension_class: tests.examples.test_node.setup_module.<locals>.TestExtension,
                 extension_uri: 'asdf://asdf-pydantic/examples/extensions/test-1.0.0'}
-        root: !<asdf://asdf-pydantic/examples/tags/node-1.0.0>
+        root: !<asdf://asdf-pydantic/examples/tags/node-2.0.0>
             name: foo
             child: 1
         ...

@@ -22,22 +22,22 @@ class AsdfNode(AsdfPydanticModel):
     attribute it the node type itself. The ASDF schema for this model will require
     self-referencing syntax. We assumes this form is valid for ASDF schemas:
 
-    ```yaml
-    ---
-    type: object
-    anyOf:
-      - $ref: "#/definitions/AsdfNode"
-    definitions:
-        AsdfNode:
-            type: object
-            properties:
-            name:
-                type: string
-            child:
-                anyOf:
-                - $ref: "#/definitions/AsdfNode"
-                - type: null
-    ```
+        ```yaml
+        ---
+        type: object
+        anyOf:
+        - $ref: "#/definitions/AsdfNode"
+        definitions:
+            AsdfNode:
+                type: object
+                properties:
+                name:
+                    type: string
+                child:
+                    anyOf:
+                    - $ref: "#/definitions/AsdfNode"
+                    - type: null
+        ```
 
     The self-reference happens in ``definitions[AsdfNode].properties.child.anyOf[0]``
     where the `$ref` is a special JSONSchema syntax that referes to the value,
@@ -45,7 +45,7 @@ class AsdfNode(AsdfPydanticModel):
     schema".
     """
 
-    _tag = "asdf://asdf-pydantic/examples/tags/node-1.0.0"
+    _tag = "asdf://asdf-pydantic/examples/tags/node-2.0.0"
 
     name: str
     child: AsdfNode | None = None
@@ -108,7 +108,8 @@ def test_errors_reading_invalid_asdf_file(tmp_path):
             - !core/extension_metadata-1.0.0 {extension_class: tests.examples.test_node.setup_module.<locals>.TestExtension,
                 extension_uri: 'asdf://asdf-pydantic/examples/extensions/test-1.0.0'}
         root: !<asdf://asdf-pydantic/examples/tags/node-1.0.0>
-            child: None
+            name: foo
+            child: 1
         ...
     """
     with open(tmp_path / "test.asdf", "w") as f:

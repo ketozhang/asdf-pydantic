@@ -1,13 +1,13 @@
 import pytest
+import yaml
 from asdf.extension import TagDefinition
 
 from asdf_pydantic import AsdfPydanticModel
 
 
-def tag(request):
-    return request.param
-
-
+########################################################################################
+# TAGS
+########################################################################################
 @pytest.mark.parametrize(
     "tag",
     (
@@ -49,3 +49,16 @@ def test_can_get_tag_uris(tag):
         _tag = tag
 
     assert TestModel.get_tag_uri()
+
+
+########################################################################################
+# SCHEMA
+########################################################################################
+def test_generated_schema_id_uses_tag_in_pattern():
+    class TestModel(AsdfPydanticModel):
+        _tag = "asdf://asdf-pydantic/tags/test-0.0.1"
+
+    assert (
+        yaml.safe_load(TestModel.model_asdf_schema())["id"]
+        == "asdf://asdf-pydantic/tags/test-0.0.1/schema"
+    )

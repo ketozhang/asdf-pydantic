@@ -32,7 +32,7 @@ class GenerateAsdfSchema(GenerateJsonSchema):
 
         if self.tag_uri:
             json_schema["$schema"] = self.schema_dialect
-            json_schema["id"] = self.tag_uri
+            json_schema["id"] = f"{self.tag_uri}/schema"
             json_schema["tag"] = f"tag:{self.tag_uri.split('://', maxsplit=2)[-1]}"
 
         # TODO: Convert jsonschema 2020-12 to ASDF schema

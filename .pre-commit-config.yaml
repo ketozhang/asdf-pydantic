@@ -21,6 +21,12 @@ repos:
     hooks:
       - id: black
 
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
 ci:
     # autofix_commit_msg: |
     #     [pre-commit.ci] auto fixes from pre-commit.com hooks

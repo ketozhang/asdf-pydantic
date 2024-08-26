@@ -72,7 +72,7 @@ class AsdfPydanticModel(BaseModel):
         )
         json_schema = schema_generator_instance.generate(cls.__pydantic_core_schema__)
 
-        return f"%YAML 1.1\n---\n{yaml.safe_dump(json_schema)}"
+        return f"%YAML 1.1\n---\n{yaml.safe_dump(json_schema, sort_keys=False)}"
 
     @classmethod
     @deprecated(

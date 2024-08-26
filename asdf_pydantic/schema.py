@@ -16,25 +16,24 @@ class GenerateAsdfSchema(GenerateJsonSchema):
     """
 
     # HACK: When we can support tree models, then not all schema should have tag
-    tag: Optional[str]
     schema_dialect = "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
 
     def __init__(
         self,
         by_alias: bool = True,
         ref_template: str = DEFAULT_ASDF_SCHEMA_REF_TEMPLATE,
-        tag: Optional[str] = None,
+        tag_uri: Optional[str] = None,
     ):
         super().__init__(by_alias=by_alias, ref_template=ref_template)
-        self.tag = tag
+        self.tag_uri = tag_uri
 
     def generate(self, schema, mode="validation"):
         json_schema = super().generate(schema, mode)  # noqa: F841
 
-        if self.tag:
+        if self.tag_uri:
             json_schema["$schema"] = self.schema_dialect
-            json_schema["id"] = self.tag
-            json_schema["tag"] = f"tag:{self.tag.split('://', maxsplit=2)[-1]}"
+            json_schema["id"] = self.tag_uri
+            json_schema["tag"] = f"tag:{self.tag_uri.split('://', maxsplit=2)[-1]}"
 
         # TODO: Convert jsonschema 2020-12 to ASDF schema
         return json_schema

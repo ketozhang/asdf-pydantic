@@ -2,6 +2,7 @@ import textwrap
 from unittest.mock import MagicMock, patch
 
 import asdf
+import asdf.schema
 import pytest
 import yaml
 from asdf.extension import Extension
@@ -36,6 +37,13 @@ def asdf_extension():
         )
         asdf_config.add_extension(TestExtension())
         yield asdf_config
+
+
+@pytest.mark.usefixtures("asdf_extension")
+def test_check_schema():
+    """Tests the model schema is correct."""
+    schema = yaml.safe_load(AsdfRectangle.model_asdf_schema())
+    asdf.schema.check_schema(schema)
 
 
 @pytest.mark.usefixtures("asdf_extension")

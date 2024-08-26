@@ -75,6 +75,13 @@ def asdf_extension():
 
 
 @pytest.mark.usefixtures("asdf_extension")
+def test_check_schema():
+    """Tests the model schema is correct."""
+    schema = yaml.safe_load(AsdfNode.model_asdf_schema())
+    asdf.schema.check_schema(schema)
+
+
+@pytest.mark.usefixtures("asdf_extension")
 def test_can_write_valid_asdf_file(tmp_path):
     """Tests using the model to write an ASDF file validates its own schema."""
     af = asdf.AsdfFile()

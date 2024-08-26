@@ -12,7 +12,7 @@ DESIRED_ASDF_SCHEMA_KEY_ORDER = (
     "allOf",
     "anyOf",
     "required",
-    "$defs",
+    "definitions",
 )
 
 
@@ -45,6 +45,10 @@ class GenerateAsdfSchema(GenerateJsonSchema):
             json_schema["$schema"] = self.schema_dialect
             json_schema["id"] = f"{self.tag_uri}/schema"
 
+        # TODO: Convert jsonschema 2020-12 to ASDF schema
+        if "$defs" in json_schema:
+            json_schema["definitions"] = json_schema.pop("$defs")
+
         # Order keys
         json_schema = {
             **{
@@ -55,5 +59,4 @@ class GenerateAsdfSchema(GenerateJsonSchema):
             **json_schema,  # Rest of the keys not in order list
         }
 
-        # TODO: Convert jsonschema 2020-12 to ASDF schema
         return json_schema

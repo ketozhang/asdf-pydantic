@@ -5,10 +5,10 @@ import pydantic
 import pytest
 import yaml
 from asdf.extension import Extension
-from asdf_pydantic import AsdfPydanticConverter
 
+from asdf_pydantic import AsdfPydanticConverter
 from asdf_pydantic.examples.shapes import AsdfRectangle
-from asdf_pydantic.examples.tree import AsdfNode
+from asdf_pydantic.examples.tree import AsdfTreeNode
 
 
 def setup_module():
@@ -28,7 +28,7 @@ def setup_module():
     asdf.get_config().add_resource_mapping(
         {
             "asdf://asdf-pydantic/shapes/schemas/rectangle-1.0.0": (
-                AsdfRectangle.schema_asdf().encode("utf-8")
+                AsdfRectangle.model_asdf_schema().encode("utf-8")
             )
         }
     )
@@ -130,9 +130,9 @@ rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width:
 def test_given_child_field_contains_asdf_object_then_schema_has_child_tag():
     from asdf.schema import check_schema
 
-    schema = yaml.safe_load(AsdfNode.schema_asdf())  # type: ignore
+    schema = yaml.safe_load(AsdfTreeNode.model_asdf_schema())  # type: ignore
     check_schema(schema)
 
     child_schema = schema["definitions"]["AsdfNode"]["properties"]["child"]
 
-    assert {"tag": AsdfNode._tag} in child_schema["anyOf"]
+    assert {"tag": AsdfTreeNode._tag} in child_schema["anyOf"]

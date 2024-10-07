@@ -30,7 +30,7 @@ class AsdfPydanticConverter(Converter):
         cls, *model_classes: Type[AsdfPydanticModel]
     ) -> "AsdfPydanticConverter":
         for model_class in model_classes:
-            cls._tag_to_class[model_class._tag] = model_class
+            cls._tag_to_class[model_class.get_tag_uri()] = model_class
         return cls()
 
     @property

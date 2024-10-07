@@ -20,23 +20,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Set up Python
       uses: actions/setup-python@v3
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         python -m pip install hatch
-        hatch env create
-        echo "ASDF_PYDANTIC_VERSION=$(hatch version)" >> $GITHUB_ENV
     - name: Build
       run: hatch build
-    - name: Create GitHub Release (prerelease only)
-      if: github.event.push
-      uses: softprops/action-gh-release@v1
-      with:
-        prerelease: true
-        tag: ${{ env.ASDF_PYDANTIC_VERSION }}
-        files: dist/*
-        generate_release_notes: true
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1

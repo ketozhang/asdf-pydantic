@@ -1,8 +1,11 @@
-import textwrap
 from typing import ClassVar
 
 import yaml
-from pydantic import BaseModel
+from asdf.extension import TagDefinition
+from pydantic import BaseModel, ConfigDict
+from typing_extensions import deprecated
+
+from asdf_pydantic.schema import DEFAULT_ASDF_SCHEMA_REF_TEMPLATE, GenerateAsdfSchema
 
 
 class AsdfPydanticModel(BaseModel):
@@ -14,10 +17,8 @@ class AsdfPydanticModel(BaseModel):
         AsdfPydanticModel object with py:meth`AsdfPydanticModel.parse_obj()`.
     """
 
-    _tag: ClassVar[str]
-
-    class Config:
-        arbitrary_types_allowed = True
+    _tag: ClassVar[str | TagDefinition]
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def asdf_yaml_tree(self) -> dict:
         d = {}
@@ -42,28 +43,57 @@ class AsdfPydanticModel(BaseModel):
         return d
 
     @classmethod
+    def get_tag_definition(cls):
+        if isinstance(cls._tag, str):
+            return TagDefinition(  # TODO: Add title and description
+                cls._tag,
+                schema_uris=[f"{cls._tag}/schema"],
+            )
+        return cls._tag
+
+    @classmethod
+    def get_tag_uri(cls):
+        if isinstance(cls._tag, TagDefinition):
+            return cls._tag.tag_uri
+        else:
+            return cls._tag
+
+    @classmethod
+    def model_asdf_schema(
+        cls,
+        by_alias: bool = True,
+        ref_template: str = DEFAULT_ASDF_SCHEMA_REF_TEMPLATE,
+        schema_generator: type[GenerateAsdfSchema] = GenerateAsdfSchema,
+    ):
+        """Get the ASDF schema definition for this model."""
+        # Implementation follows closely with the `BaseModel.model_json_schema`
+        schema_generator_instance = schema_generator(
+            by_alias=by_alias, ref_template=ref_template, tag_uri=cls.get_tag_uri()
+        )
+        json_schema = schema_generator_instance.generate(cls.__pydantic_core_schema__)
+
+        return f"%YAML 1.1\n---\n{yaml.safe_dump(json_schema, sort_keys=False)}"
+
+    @classmethod
+    @deprecated(
+        "The `schema_asdf` method is deprecated; use `model_asdf_schema` instead."
+    )
     def schema_asdf(
-        cls, *, metaschema: str = "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0"
+        cls,
+        *,
+        metaschema: str = GenerateAsdfSchema.schema_dialect,
+        **kwargs,
     ) -> str:
         """Get the ASDF schema definition for this model.
 
         Parameters
         ----------
         metaschema, optional
-            A metaschema URI, by default "http://stsci.edu/schemas/asdf/asdf-schema-1.0.0".
-            See https://asdf.readthedocs.io/en/stable/asdf/extending/schemas.html#anatomy-of-a-schema
-            for more options.
+            A metaschema URI
         """  # noqa: E501
-        # TODO: Function signature should follow BaseModel.schema() or
-        # BaseModel.schema_json()
-        header = textwrap.dedent(
-            f"""
-            %YAML 1.1
-            ---
-            $schema: {metaschema}
-            id: {cls._tag}
+        if metaschema != GenerateAsdfSchema.schema_dialect:
+            raise NotImplementedError(
+                f"Only {GenerateAsdfSchema.schema_dialect} is supported as metaschema."
+            )
 
-            """
-        )
-        body = yaml.dump(cls.schema())
-        return header + body
+        return cls.model_asdf_schema(**kwargs)

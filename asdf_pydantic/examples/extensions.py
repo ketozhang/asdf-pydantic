@@ -4,9 +4,9 @@ from asdf.extension import Extension
 
 from asdf_pydantic.converter import AsdfPydanticConverter
 from asdf_pydantic.examples.shapes import AsdfRectangle
-from asdf_pydantic.examples.tree import AsdfNode
+from asdf_pydantic.examples.tree import AsdfTreeNode
 
-AsdfPydanticConverter.add_models(AsdfRectangle, AsdfNode)
+AsdfPydanticConverter.add_models(AsdfRectangle, AsdfTreeNode)
 
 
 class ExampleExtension(Extension):

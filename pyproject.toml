@@ -1,12 +1,12 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
 name = "asdf-pydantic"
 description = 'Create ASDF tags with pydantic models'
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license-files = {paths = ["LICENSE"]}
 keywords = []
 authors = [
@@ -15,15 +15,16 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "asdf>=2",
-  "pydantic>=1,<2",
+  "asdf>=3",
+  "pydantic>=2",
+  "numpy>=1.25",
 ]
 dynamic = ["version"]
 
@@ -36,10 +37,11 @@ Source = "https://github.com/ketozhang/asdf-pydantic"
 'asdf.extensions' = { asdf_pydantic_extension = 'asdf_pydantic.examples.extensions:get_extensions' }
 
 [tool.hatch.version]
-path = "asdf_pydantic/__version__.py"
+source = "vcs"
 
 # Default Environment
 [tool.hatch.envs.default]
+installer = "uv"
 dependencies = [
   "ipython",
   "pytest",
@@ -52,6 +54,30 @@ dependencies = [
 [tool.hatch.envs.default.scripts]
 test = "pytest {args}"
 test-cov = "test --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
+
+[tool.hatch.envs.test]
+template = "default"
+matrix-name-format = "{variable}={value}"
+
+[tool.hatch.envs.test.scripts]
+test = "pytest {args}"
+
+[[tool.hatch.envs.test.matrix]]
+# Only test with numpy v1 on Python 3.9
+python = ["3.9"]
+numpy-version = ["1"]
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.10", "3.11", "3.12"]
+numpy-version = ["1", "2"]
+
+
+[tool.hatch.envs.test.overrides]
+matrix.numpy-version.dependencies = [
+  { value = "numpy>=1,<2", if = ["1"] },
+  { value = "numpy>=2,<3", if = ["2"] },
+  { value = "astropy>=6.1", if = ["2"] },
+]
 
 [tool.hatch.envs.docs]
 dependencies = [

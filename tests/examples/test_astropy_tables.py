@@ -12,14 +12,14 @@ import yaml
 
 from asdf_pydantic import AsdfPydanticConverter, AsdfPydanticModel
 
-T = TypeVar("T")
+T = TypeVar("T", bound=Table)
 
 AsdfAstropyTable = Annotated[
     T,
     WithJsonSchema(
         {
             "type": "object",
-            "$ref": "http://asdf.org/table/table-1.1.0",
+            "$ref": "http://stsci.edu/schemas/asdf.org/table/table-1.1.0",
         }
     ),
 ]

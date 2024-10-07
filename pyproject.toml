@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "asdf-pydantic"
 description = 'Create ASDF tags with pydantic models'
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license-files = {paths = ["LICENSE"]}
 keywords = []
 authors = [
@@ -15,7 +15,6 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -26,7 +25,6 @@ dependencies = [
   "asdf>=3",
   "pydantic>=2",
   "numpy>=1.25",
-  "numpy<2;python_version<'3.10'",
 ]
 dynamic = ["version"]
 

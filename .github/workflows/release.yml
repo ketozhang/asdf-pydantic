@@ -4,6 +4,8 @@ on:
   push: # On push to these prerelease branches
     branches:
       - main
+    tags:
+      - v*
   release: # On create a GitHub Release
     types:
       - created

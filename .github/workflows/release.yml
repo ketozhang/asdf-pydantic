@@ -3,7 +3,7 @@ name: Release package
 on:
   push: # On push to these prerelease branches
     branches:
-      - v2
+      - main
   release: # On create a GitHub Release
     types:
       - created

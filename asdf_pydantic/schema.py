@@ -1,5 +1,36 @@
+"""
+
+## Adding existing ASDF tags as a field
+Type annotation must be added to the field to specify the ASDF tag to use in the
+ASDF schema. There are a few options to do this:
+
+    - Use `AsdfTag` to specify the tag URI.
+    - Use `WithAsdfSchema` and pass in a dictionary to extend the schema with
+    additional properties. The key `"$ref"` can be used to specify the tag URI.
+
+    from asdf_pydantic import AsdfPydanticModel
+    from asdf_pydantic.schema import AsdfTag
+    from astropy.table import Table
+
+    class MyModel(AsdfPydanticModel):
+        table: Annotated[Table, AsdfTag("http://stsci.edu/schemas/asdf.org/table/table-1.1.0")]
+
+For more customization of the ASDF schema output, you can use `WithAsdfSchema` to
+extend the schema with additional properties.
+
+    # Changing the title of the field
+    table: Annotated[
+        Table,
+        WithAsdfSchema({
+            "title": "TABLE",
+            "$ref": "http://stsci.edu/schemas/asdf.org/table/table-1.1.0"
+        }),
+    ]
+"""
+
 from typing import Optional
 
+from pydantic import WithJsonSchema
 from pydantic.json_schema import GenerateJsonSchema
 
 DEFAULT_ASDF_SCHEMA_REF_TEMPLATE = "#/definitions/{model}"
@@ -60,3 +91,13 @@ class GenerateAsdfSchema(GenerateJsonSchema):
         }
 
         return json_schema
+
+
+class WithAsdfSchema(WithJsonSchema):
+    def __init__(self, asdf_schema: dict, **kwargs):
+        json_schema = {"type": "object", **asdf_schema}
+        super().__init__(json_schema, **kwargs)
+
+
+def AsdfTag(tag: str) -> WithAsdfSchema:
+    return WithAsdfSchema({"$ref": tag})

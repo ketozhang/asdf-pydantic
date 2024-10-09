@@ -1,33 +1,24 @@
 from __future__ import annotations
-from typing import Annotated, TypeVar
+
+from typing import Annotated
 
 import asdf
 import astropy.units as u
+import pytest
+import yaml
 from asdf.extension import Extension
 from astropy.table import Table
 from astropy.units import Quantity
-from pydantic import WithJsonSchema
-import pytest
-import yaml
 
 from asdf_pydantic import AsdfPydanticConverter, AsdfPydanticModel
-
-T = TypeVar("T", bound=Table)
-
-AsdfAstropyTable = Annotated[
-    T,
-    WithJsonSchema(
-        {
-            "type": "object",
-            "$ref": "http://stsci.edu/schemas/asdf.org/table/table-1.1.0",
-        }
-    ),
-]
+from asdf_pydantic.schema import AsdfTag
 
 
 class Database(AsdfPydanticModel):
     _tag = "asdf://asdf-pydantic/examples/tags/database-1.0.0"
-    positions: AsdfAstropyTable[Table]
+    positions: Annotated[
+        Table, AsdfTag("http://stsci.edu/schemas/asdf.org/table/table-1.1.0")
+    ]
 
 
 @pytest.fixture()

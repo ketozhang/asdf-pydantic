@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import textwrap
+from typing import Annotated
 from unittest.mock import MagicMock, patch
 
 import asdf
@@ -13,6 +14,8 @@ import yaml
 from asdf.extension import Extension
 
 from asdf_pydantic import AsdfPydanticConverter, AsdfPydanticModel
+
+SelfAnnotatedAsdfNode = Annotated[AsdfTag]
 
 
 class AsdfNode(AsdfPydanticModel):

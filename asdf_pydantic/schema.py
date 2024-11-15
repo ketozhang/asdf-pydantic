@@ -28,7 +28,7 @@ extend the schema with additional properties.
     ]
 """
 
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import WithJsonSchema
 from pydantic.json_schema import GenerateJsonSchema
@@ -98,6 +98,13 @@ class WithAsdfSchema(WithJsonSchema):
         super().__init__(asdf_schema, **kwargs)
 
 
+def AsdfTag(tag: str, mode: Literal["auto", "ref", "tag"] = "auto") -> WithAsdfSchema:
+    if mode == "auto":
+        parsed_mode = "tag" if tag.startswith("tag") else "ref"
+    else:
+        parsed_mode = mode
 
-def AsdfTag(tag: str) -> WithAsdfSchema:
-    return WithAsdfSchema({"$ref": tag})
+    if parsed_mode == "tag":
+        return WithAsdfSchema({"tag": tag})
+    else:
+        return WithAsdfSchema({"$ref": tag})

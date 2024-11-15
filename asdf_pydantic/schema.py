@@ -95,8 +95,8 @@ class GenerateAsdfSchema(GenerateJsonSchema):
 
 class WithAsdfSchema(WithJsonSchema):
     def __init__(self, asdf_schema: dict, **kwargs):
-        json_schema = {"type": "object", **asdf_schema}
-        super().__init__(json_schema, **kwargs)
+        super().__init__(asdf_schema, **kwargs)
+
 
 
 def AsdfTag(tag: str) -> WithAsdfSchema:

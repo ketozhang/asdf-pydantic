@@ -1,6 +1,5 @@
 # asdf-pydantic
 
-
 [![PyPI - Version](https://img.shields.io/pypi/v/asdf-pydantic.svg)](https://pypi.org/project/asdf-pydantic)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/asdf-pydantic.svg)](https://pypi.org/project/asdf-pydantic)
 [![Documentation Status](https://readthedocs.org/projects/asdf-pydantic/badge/?version=latest)](https://asdf-pydantic.readthedocs.io/en/latest/?badge=latest)
@@ -9,7 +8,10 @@ Create ASDF tags with *pydantic* models.
 
 <div style="width: 33vw; min-width: 50em; max-width: 70em; margin:auto;">
 
+**ASDF model written with _pydantic_**
+
 ```py
+import sdf
 from asdf_pydantic import AsdfPydanticModel
 
 class Rectangle(AsdfPydanticModel):
@@ -23,6 +25,10 @@ class Rectangle(AsdfPydanticModel):
 af = asdf.AsdfFile()
 af["rect"] = Rectangle(width=1, height=1)
 ```
+
+
+<details>
+<summary><b>ASDF File</b></summary>
 
 ```yaml
 #ASDF 1.0.0
@@ -50,19 +56,76 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
     width: 1.0}
 ...
 ```
+
+</details>
+
+<details>
+<summary><b>ASDF Schema</b></summary>
+
+
+```yaml
+%YAML 1.1
+---
+$schema: http://stsci.edu/schemas/asdf/asdf-schema-1.0.0
+id: asdf://asdf-pydantic/examples/tags/rectangle-1.0.0/schema
+title: Rectangle
+type: object
+properties:
+  width:
+    title: Width
+    type: number
+  height:
+    title: Height
+    type: number
+required:
+- width
+- height
+```
+
+
+
+
+</details>
+
+<details>
+<summary><b>JSON Schema</b></summary>
+
+```yaml
+{
+    "properties": {
+        "width": {
+            "title": "Width",
+            "type": "number"
+        },
+        "height": {
+            "title": "Height",
+            "type": "number"
+        }
+    },
+    "required": [
+        "width",
+        "height"
+    ],
+    "title": "Rectangle",
+    "type": "object"
+}
+```
+
+</details>
+
 </div>
 
 ## Features
 
 - [x] Create ASDF tag from your *pydantic* models with batteries ([converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)) included.
+- [x] Automatically generates ASDF schemas
 - [x] Validates data models as you create them and not only when reading and writing ASDF files.
 - [x] Preserve Python types when deserializing ASDF files.
-- [x] All the cool things that comes with *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types).
-- [ ] <span style="color: #757575!important">Comes with ASDF schemas (TBD).</span>
+- [x] All the benefits with writing and using *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types).
 
 ## Installation
 
-```console
+```sh
 pip install asdf-pydantic
 ```
 
@@ -70,6 +133,7 @@ pip install asdf-pydantic
 
 Define your data model with `AsdfPydanticModel`. For *pydantic* fans, this has
 all the features of pydantic's BaseModel.
+
 ```py
 # mypackage/shapes.py
 from asdf_pydantic import AsdfPydanticModel
@@ -77,11 +141,16 @@ from asdf_pydantic import AsdfPydanticModel
 class Rectangle(AsdfPydanticModel):
     _tag = "asdf://asdf-pydantic/examples/tags/rectangle-1.0.0"
 
-    width: float
-    height: float
+    width: Annotated[
+        u.Quantity[u.m], AsdfTag("tag:stsci.edu:asdf/core/unit/quantity-1.*")
+    ]
+    height: Annotated[
+        u.Quantity[u.m], AsdfTag("tag:stsci.edu:asdf/core/unit/quantity-1.*")
+    ]
 ```
 
 Then create an extension with the converter included with *asdf-pydantic*:
+
 ```py
 # mypackage/extensions.py
 from asdf.extension import Extension
@@ -97,8 +166,8 @@ class ShapesExtension(Extension):
     tags = [*converter.tags]
 ```
 
-Install the extension either by entry point specification or add it to
-`asdf.get_config()`:
+After your extension is installed either the entrypoint method or temporarily
+with `asdf.get_config()`:
 
 ```py
 import asdf
@@ -115,8 +184,7 @@ with open("shapes.asdf", "wb") as fp:
 
 ---
 
-```{toctree}
+```sh
 :maxdepth: 1
 model
 autoapi
-```

@@ -7,13 +7,8 @@ import pytest
 import yaml
 from asdf.extension import Extension
 
-from asdf_pydantic import AsdfPydanticConverter, AsdfPydanticModel
-
-
-class AsdfRectangle(AsdfPydanticModel):
-    _tag = "asdf://asdf-pydantic/examples/tags/rectangle-1.0.0"
-    width: float
-    height: float
+from asdf_pydantic import AsdfPydanticConverter
+from tests.examples.shapes import AsdfRectangle
 
 
 @pytest.fixture()

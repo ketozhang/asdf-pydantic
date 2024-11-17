@@ -7,8 +7,8 @@ import yaml
 from asdf.extension import Extension
 
 from asdf_pydantic import AsdfPydanticConverter
-from asdf_pydantic.examples.shapes import AsdfRectangle
-from asdf_pydantic.examples.tree import AsdfTreeNode
+from tests.examples.shapes import AsdfRectangle
+from tests.examples.tree import AsdfTreeNode
 
 
 def setup_module():

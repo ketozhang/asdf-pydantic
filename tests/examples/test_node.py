@@ -54,12 +54,13 @@ class AsdfNode(AsdfPydanticModel):
 @pytest.fixture()
 def asdf_extension():
     """Registers an ASDF extension containing models for this test."""
-    AsdfPydanticConverter.add_models(AsdfNode)
+    converter = AsdfPydanticConverter()
+    converter.add_models(AsdfNode)
 
     class TestExtension(Extension):
         extension_uri = "asdf://asdf-pydantic/examples/extensions/test-1.0.0"
 
-        converters = [AsdfPydanticConverter()]  # type: ignore
+        converters = [converter]  # type: ignore
         tags = [AsdfNode.get_tag_definition()]  # type: ignore
 
     with asdf.config_context() as asdf_config:

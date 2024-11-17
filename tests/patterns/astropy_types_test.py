@@ -23,13 +23,14 @@ class DataContainer(AsdfPydanticModel):
 
 
 def setup_module():
-    AsdfPydanticConverter.add_models(DataPoint, DataContainer)
+    converter = AsdfPydanticConverter()
+    converter.add_models(DataPoint, DataContainer)
 
     class TestExtension(Extension):
         extension_uri = "asdf://asdf-pydantic/examples/extensions/test-1.0.0"
 
-        converters = [AsdfPydanticConverter()]  # type: ignore
-        tags = [*AsdfPydanticConverter().tags]  # type: ignore
+        converters = [converter]  # type: ignore
+        tags = [*converter.tags]  # type: ignore
 
     asdf.get_config().add_extension(TestExtension())
 

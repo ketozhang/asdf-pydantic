@@ -14,13 +14,14 @@ from tests.examples.tree import AsdfTreeNode
 
 
 def setup_module():
-    AsdfPydanticConverter.add_models(AsdfRectangle)
+    converter = AsdfPydanticConverter()
+    converter.add_models(AsdfRectangle)
 
     class TestExtension(Extension):
         extension_uri = "asdf://asdf-pydantic/examples/extensions/test-1.0.0"  # type: ignore
 
-        tags = [*AsdfPydanticConverter().tags]  # type: ignore
-        converters = [AsdfPydanticConverter()]  # type: ignore
+        tags = [*converter.tags]  # type: ignore
+        converters = [converter]  # type: ignore
 
     # HACK: The schema URI should be referenced from `AsdfRectangle._schema`.
     # Then there should be a way to automatically add the schema to ASDF

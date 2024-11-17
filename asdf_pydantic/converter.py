@@ -17,13 +17,13 @@ class AsdfPydanticConverter(Converter):
 
     _tag_to_class: dict[str, Type[AsdfPydanticModel]] = {}
 
-    def __init__(self) -> None:
+
+    def __new__(cls, *args, **kwargs):
         global _ASDF_PYDANTIC_SINGLETON_CONVERTER
-
         if _ASDF_PYDANTIC_SINGLETON_CONVERTER is None:
-            _ASDF_PYDANTIC_SINGLETON_CONVERTER = self
+            _ASDF_PYDANTIC_SINGLETON_CONVERTER = super().__new__(cls)
 
-        self = _ASDF_PYDANTIC_SINGLETON_CONVERTER
+        return _ASDF_PYDANTIC_SINGLETON_CONVERTER
 
     @classmethod
     def add_models(

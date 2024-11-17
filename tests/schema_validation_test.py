@@ -1,4 +1,5 @@
 from tempfile import NamedTemporaryFile
+from typing import Annotated
 
 import asdf
 import pydantic
@@ -7,6 +8,7 @@ import yaml
 from asdf.extension import Extension
 
 from asdf_pydantic import AsdfPydanticConverter
+from asdf_pydantic.model import AsdfPydanticModel
 from tests.examples.shapes import AsdfRectangle
 from tests.examples.tree import AsdfTreeNode
 
@@ -136,3 +138,32 @@ def test_given_child_field_contains_asdf_object_then_schema_has_child_tag():
     child_schema = schema["definitions"]["AsdfNode"]["properties"]["child"]
 
     assert {"tag": AsdfTreeNode._tag} in child_schema["anyOf"]
+
+
+########################################################################################
+# AsdfTag
+########################################################################################
+from asdf_pydantic.schema import AsdfTag  # noqa: E402
+
+
+@pytest.mark.parametrize(
+    "asdf_tag_str, mode, expected_ref_key",
+    [
+        ("http://stsci.edu/schemas/asdf/unit/quantity-1.2.0", "auto", "$ref"),
+        ("http://stsci.edu/schemas/asdf/unit/quantity-1.2.0", "ref", "$ref"),
+        ("tag:stsci.edu:asdf/table/table-1.1.0", "auto", "tag"),
+        ("tag:stsci.edu:asdf/table/table-1.1.0", "tag", "tag"),
+    ],
+)
+def test_tag_mode(asdf_tag_str: str, mode, expected_ref_key):
+    """Test that schema correctly has ``$ref:`` or ``tag:`` depending on the
+    selected mode.
+    """
+    from astropy.table import Table
+
+    class TestModel(AsdfPydanticModel):
+        _tag = "asdf://asdf-pydantic/examples/tags/test-model-1.0.0"
+        table: Annotated[Table, AsdfTag(asdf_tag_str, mode=mode)]
+
+    schema = yaml.safe_load(TestModel.model_asdf_schema())
+    assert expected_ref_key in schema["properties"]["table"]

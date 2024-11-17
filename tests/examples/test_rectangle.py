@@ -14,12 +14,13 @@ from tests.examples.shapes import AsdfRectangle
 @pytest.fixture()
 def asdf_extension():
     """Registers an ASDF extension containing models for this test."""
-    AsdfPydanticConverter.add_models(AsdfRectangle)
+    converter = AsdfPydanticConverter()
+    converter.add_models(AsdfRectangle)
 
     class TestExtension(Extension):
         extension_uri = "asdf://asdf-pydantic/examples/extensions/test-1.0.0"
 
-        converters = [AsdfPydanticConverter()]  # type: ignore
+        converters = [converter]  # type: ignore
         tags = [AsdfRectangle.get_tag_definition()]  # type: ignore
 
     with asdf.config_context() as asdf_config:

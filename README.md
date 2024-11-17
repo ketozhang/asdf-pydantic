@@ -88,12 +88,13 @@ from asdf.extension import Extension
 from asdf_pydantic.converter import AsdfPydanticConverter
 from mypackage.shapes import Rectangle
 
-AsdfPydanticConverter.add_models(Rectangle)
+converter = AsdfPydanticConverter()
+converter.add_models(Rectangle)
 
 class ShapesExtension(Extension):
     extension_uri = "asdf://asdf-pydantic/examples/extensions/shapes-1.0.0"
-    converters = [AsdfPydanticConverter()]
-    tags = [*AsdfPydanticConverter().tags]
+    converters = [converter]
+    tags = [*converter.tags]
 ```
 
 Install the extension either by entry point specification or add it to

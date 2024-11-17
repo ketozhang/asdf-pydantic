@@ -4,11 +4,9 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/asdf-pydantic.svg)](https://pypi.org/project/asdf-pydantic)
 [![Documentation Status](https://readthedocs.org/projects/asdf-pydantic/badge/?version=latest)](https://asdf-pydantic.readthedocs.io/en/latest/?badge=latest)
 
-Create ASDF tags with *pydantic* models.
-
 <div style="width: 33vw; min-width: 50em; max-width: 70em; margin:auto;">
 
-**ASDF model written with _pydantic_**
+Create ASDF tags by writing *pydantic* models.
 
 ```py
 import sdf

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from asdf_pydantic.examples.tree import AsdfTreeNode, Node
+from tests.examples.tree import AsdfTreeNode, Node
 
 
 def test_sanity():

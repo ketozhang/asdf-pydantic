@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Type
 
 from asdf.extension import Converter
-from asdf.tagged import TaggedDict
 
 from asdf_pydantic.model import AsdfPydanticModel
 
@@ -41,11 +40,4 @@ class AsdfPydanticConverter(Converter):
         return obj.asdf_yaml_tree()
 
     def from_yaml_tree(self, node, tag, ctx):
-        def node_to_dict(node_: TaggedDict | dict):
-            """Converter node with possible nested TaggedDict to simple dict."""
-            # Recursive DFS
-            if not isinstance(node_, (dict, TaggedDict)):
-                return node_
-            return {k: node_to_dict(v) for k, v in node_.items()}
-
-        return self._tag_to_class[tag].model_validate(node_to_dict(node))
+        return self._tag_to_class[tag].parse_obj(node)

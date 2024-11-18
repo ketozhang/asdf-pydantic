@@ -1,8 +1,9 @@
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import yaml
 from asdf.extension import TagDefinition
-from pydantic import BaseModel, ConfigDict
+from asdf.tagged import TaggedDict
+from pydantic import BaseModel, ConfigDict, model_validator
 from typing_extensions import deprecated
 
 from asdf_pydantic.schema import DEFAULT_ASDF_SCHEMA_REF_TEMPLATE, GenerateAsdfSchema
@@ -41,6 +42,11 @@ class AsdfPydanticModel(BaseModel):
                 )
 
         return d
+
+    @model_validator(mode="before")
+    @classmethod
+    def handle_asdf_tagged_dict_compat(cls, data: Any) -> dict:
+        return dict(data) if isinstance(data, TaggedDict) else data
 
     @classmethod
     def get_tag_definition(cls):

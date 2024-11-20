@@ -45,7 +45,8 @@ dependencies = [
 
 [tool.hatch.envs.default.scripts]
 test = "pytest {args}"
-test-cov = "test --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
+test-cov = "test --cov-report= --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
+cov-report = "coverage report {args}"
 
 [tool.hatch.envs.test]
 template = "default"
@@ -86,6 +87,8 @@ omit = ["asdf_pydantic/__version__.py"]
 
 [tool.coverage.report]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+precision = 1
+fail_under = 95
 
 [tool.ruff.pydocstyle]
 convention = "google"

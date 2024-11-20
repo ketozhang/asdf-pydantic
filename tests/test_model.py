@@ -1,8 +1,50 @@
 import pytest
 import yaml
 from asdf.extension import TagDefinition
+from pydantic import BaseModel
 
 from asdf_pydantic import AsdfPydanticModel
+
+
+########################################################################################
+# ASDF Tree
+########################################################################################
+def test_asdf_yaml_tree_sanity():
+    class TestModel(AsdfPydanticModel):
+        foo: str
+
+    model = TestModel(foo="bar")
+    assert model.asdf_yaml_tree() == {"foo": "bar"}
+
+
+def test_asdf_yaml_tree_nested_dict():
+    class NestedTestModel(AsdfPydanticModel):
+        nested: dict
+
+    model = NestedTestModel(nested={"foo": "bar"})
+    assert model.asdf_yaml_tree() == {"nested": {"foo": "bar"}}
+
+
+def test_asdf_yaml_tree_nested_basemodel():
+    class TestModel(BaseModel):
+        foo: str
+
+    class NestedTestModel(AsdfPydanticModel):
+        nested: TestModel
+
+    model = NestedTestModel(nested=TestModel(foo="bar"))
+    assert model.asdf_yaml_tree() == {"nested": {"foo": "bar"}}
+
+
+def test_asdf_yaml_tree_nested_asdf_pydantic_model():
+    class TestModel(AsdfPydanticModel):
+        foo: str
+
+    class NestedTestModel(AsdfPydanticModel):
+        nested: TestModel
+
+    model = NestedTestModel(nested=TestModel(foo="bar"))
+    assert model.asdf_yaml_tree() == {"nested": TestModel(foo="bar")}
 
 
 ########################################################################################

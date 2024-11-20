@@ -22,26 +22,35 @@ class AsdfPydanticModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def asdf_yaml_tree(self) -> dict:
-        d = {}
-        for field_key, v in self.__dict__.items():
-            if field_key not in self.model_fields:
-                continue
+        """Converts the model to an ASDF-compatible YAML tree (dict).
 
+        .. note::
+            Any fields that are normal Pydantic `BaseModel` will be converted to
+            dict. See conversion table.
+
+        Conversion Table:
+
+            +-------------------------+-----------------------------+
+            | Value type in field     | Value type in dict          |
+            +=========================+=============================+
+            | AsdfPydanticModel       | No conversion               |
+            +-------------------------+-----------------------------+
+            | BaseModel               | Converted to dict using     |
+            |                         | BaseModel.model_dump()      |
+            +-------------------------+-----------------------------+
+            | Other types             | No conversion               |
+            +-------------------------+-----------------------------+
+        """
+        tree = {}
+        for k, v in dict(self).items():
             if isinstance(v, AsdfPydanticModel):
-                d[field_key] = v
+                tree[k] = v
+            elif isinstance(v, BaseModel):
+                tree[k] = v.model_dump()
             else:
-                d[field_key] = self._get_value(
-                    v,
-                    to_dict=True,
-                    by_alias=False,
-                    include=None,
-                    exclude=None,
-                    exclude_unset=False,
-                    exclude_defaults=False,
-                    exclude_none=False,
-                )
+                tree[k] = v
 
-        return d
+        return tree
 
     @model_validator(mode="before")
     @classmethod

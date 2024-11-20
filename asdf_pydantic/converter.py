@@ -40,4 +40,4 @@ class AsdfPydanticConverter(Converter):
         return obj.asdf_yaml_tree()
 
     def from_yaml_tree(self, node, tag, ctx):
-        return self._tag_to_class[tag].parse_obj(node)
+        return self._tag_to_class[tag].model_validate(node)

@@ -15,7 +15,7 @@ class AsdfPydanticModel(BaseModel):
     ASDF Serialization and Deserialization:
         Serialize to ASDF yaml tree is done with the
         py:classmethod`AsdfPydanticModel.asdf_yaml_tree()` and deserialize to an
-        AsdfPydanticModel object with py:meth`AsdfPydanticModel.parse_obj()`.
+        AsdfPydanticModel object with py:meth`AsdfPydanticModel.model_validate()`.
     """
 
     _tag: ClassVar[str | TagDefinition]

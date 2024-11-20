@@ -6,7 +6,7 @@
 
 <div style="width: 33vw; min-width: 50em; max-width: 70em; margin:auto;">
 
-Create ASDF tags by writing *pydantic* models.
+Create ASDF tags by writing [*Pydantic*](https://pydantic-docs.helpmanual.io/) models.
 
 ```py
 import sdf

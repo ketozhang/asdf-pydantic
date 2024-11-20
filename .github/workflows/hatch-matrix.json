@@ -25,10 +25,6 @@
       "python-version": "3.12"
     },
     {
-      "hatch-env-name": "test.py3.13-numpy-version=1",
-      "python-version": "3.13"
-    },
-    {
       "hatch-env-name": "test.py3.13-numpy-version=2",
       "python-version": "3.13"
     }

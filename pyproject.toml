@@ -56,8 +56,13 @@ matrix-name-format = "{variable}={value}"
 test = "pytest {args}"
 
 [[tool.hatch.envs.test.matrix]]
-python = ["3.10", "3.11", "3.12", "3.13"]
+python = ["3.10", "3.11", "3.12"]
 numpy-version = ["1", "2"]
+
+# Only test numpy 2 with python 3.13
+[[tool.hatch.envs.test.matrix]]
+python = ["3.13"]
+numpy-version = ["2"]
 
 
 [tool.hatch.envs.test.overrides]

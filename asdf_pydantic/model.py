@@ -24,7 +24,7 @@ class AsdfPydanticModel(BaseModel):
     def asdf_yaml_tree(self) -> dict:
         d = {}
         for field_key, v in self.__dict__.items():
-            if field_key not in self.__fields__:
+            if field_key not in self.model_fields:
                 continue
 
             if isinstance(v, AsdfPydanticModel):

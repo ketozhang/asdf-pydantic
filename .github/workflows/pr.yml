@@ -25,3 +25,5 @@ jobs:
         python -m pip install hatch
     - name: Pytest
       run: hatch run +py=${{ matrix.python-version }} test:test-cov
+    - name: Coverage report
+      run: hatch run +py=${{ matrix.python-version }} test:cov-report

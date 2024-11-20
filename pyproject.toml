@@ -7,11 +7,9 @@ name = "asdf-pydantic"
 description = 'Create ASDF tags with pydantic models'
 readme = "README.md"
 requires-python = ">=3.10"
-license-files = {paths = ["LICENSE"]}
+license-files = { paths = ["LICENSE"] }
 keywords = []
-authors = [
-  { name = "Keto D. Zhang", email = "keto.zhang@gmail.com" },
-]
+authors = [{ name = "Keto D. Zhang", email = "keto.zhang@gmail.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
@@ -22,11 +20,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = [
-  "asdf>=3",
-  "pydantic>=2",
-  "numpy>=1.25",
-]
+dependencies = ["asdf>=3", "pydantic>=2", "numpy>=1.25"]
 dynamic = ["version"]
 
 [project.urls]
@@ -46,7 +40,7 @@ dependencies = [
   "pytest-cov",
   "ipython",
   "astropy",
-  "asdf-astropy"
+  "asdf-astropy",
 ]
 
 [tool.hatch.envs.default.scripts]
@@ -61,29 +55,25 @@ matrix-name-format = "{variable}={value}"
 test = "pytest {args}"
 
 [[tool.hatch.envs.test.matrix]]
-# Only test with numpy v1 on Python 3.9
-python = ["3.9"]
-numpy-version = ["1"]
-
-[[tool.hatch.envs.test.matrix]]
 python = ["3.10", "3.11", "3.12", "3.13"]
 numpy-version = ["1", "2"]
 
 
 [tool.hatch.envs.test.overrides]
 matrix.numpy-version.dependencies = [
-  { value = "numpy>=1,<2", if = ["1"] },
-  { value = "numpy>=2,<3", if = ["2"] },
-  { value = "astropy>=6.1", if = ["2"] },
+  { value = "numpy>=1,<2", if = [
+    "1",
+  ] },
+  { value = "numpy>=2,<3", if = [
+    "2",
+  ] },
+  { value = "astropy>=6.1", if = [
+    "2",
+  ] },
 ]
 
 [tool.hatch.envs.docs]
-dependencies = [
-  "sphinx",
-  "sphinx-autoapi",
-  "sphinx-book-theme",
-  "myst-parser"
-]
+dependencies = ["sphinx", "sphinx-autoapi", "sphinx-book-theme", "myst-parser"]
 
 [tool.hatch.envs.docs.scripts]
 build = "sphinx-build -b html docs docs/_build/html {args}"
@@ -92,16 +82,10 @@ build = "sphinx-build -b html docs docs/_build/html {args}"
 [tool.coverage.run]
 branch = true
 parallel = true
-omit = [
-  "asdf_pydantic/__version__.py",
-]
+omit = ["asdf_pydantic/__version__.py"]
 
 [tool.coverage.report]
-exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
-]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.ruff.pydocstyle]
 convention = "google"

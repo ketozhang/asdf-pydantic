@@ -57,16 +57,11 @@ test = "pytest {args}"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["3.10", "3.11", "3.12"]
-numpy-version = ["1", "2"]
-
-# Only test numpy 2 with python 3.13
-[[tool.hatch.envs.test.matrix]]
-python = ["3.13"]
-numpy-version = ["2"]
-
+numpy = ["1", "2"]
+asdf = ["3", "4"]
 
 [tool.hatch.envs.test.overrides]
-matrix.numpy-version.dependencies = [
+matrix.numpy.dependencies = [
   { value = "numpy>=1,<2", if = [
     "1",
   ] },
@@ -75,6 +70,15 @@ matrix.numpy-version.dependencies = [
   ] },
   { value = "astropy>=6.1", if = [
     "2",
+  ] },
+]
+
+matrix.asdf.dependencies = [
+  { value = "asdf>=3,<4", if = [
+    "3",
+  ] },
+  { value = "asdf>=4,<5", if = [
+    "4",
   ] },
 ]
 

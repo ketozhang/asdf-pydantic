@@ -1,30 +1,6 @@
 {
   "include": [
     {
-      "hatch-env-name": "test.py3.10-numpy=1",
-      "python-version": "3.10"
-    },
-    {
-      "hatch-env-name": "test.py3.10-numpy=2",
-      "python-version": "3.10"
-    },
-    {
-      "hatch-env-name": "test.py3.11-numpy=1",
-      "python-version": "3.11"
-    },
-    {
-      "hatch-env-name": "test.py3.11-numpy=2",
-      "python-version": "3.11"
-    },
-    {
-      "hatch-env-name": "test.py3.12-numpy=1",
-      "python-version": "3.12"
-    },
-    {
-      "hatch-env-name": "test.py3.12-numpy=2",
-      "python-version": "3.12"
-    },
-    {
       "hatch-env-name": "test.py3.10-numpy=1-asdf=3",
       "python-version": "3.10"
     },

@@ -38,6 +38,7 @@ repos:
       - id: generate-hatch-matrix
         name: generate-hatch-matrix
         language: system
+        stages: [push]
         entry: bash .github/workflows/generate-hatch-matrix.sh
         files: |
             (?x)^(

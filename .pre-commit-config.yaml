@@ -57,5 +57,6 @@ ci:
     # autoupdate_branch: ''
     # autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
     autoupdate_schedule: monthly
-    # skip: []
+    skip:
+      - generate-hatch-matrix
     # submodules: false

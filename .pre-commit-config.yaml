@@ -33,6 +33,21 @@ repos:
       - id: conventional-pre-commit
         stages: [commit-msg]
 
+  - repo: local
+    hooks:
+      - id: generate-hatch-matrix
+        name: generate-hatch-matrix
+        language: system
+        entry: bash .github/workflows/generate-hatch-matrix.sh
+        files: |
+            (?x)^(
+                .github/workflows/generate-hatch-matrix.sh|
+                .github/workflows/hatch-matrix.json
+            )$
+        args: [".github/workflows/hatch-matrix.json"]
+        pass_filenames: false
+        types: [file]
+
 ci:
     # autofix_commit_msg: |
     #     [pre-commit.ci] auto fixes from pre-commit.com hooks

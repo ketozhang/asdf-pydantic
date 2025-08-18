@@ -7,7 +7,7 @@ name = "asdf-pydantic"
 description = 'Create ASDF tags with pydantic models'
 readme = "README.md"
 requires-python = ">=3.10"
-license-files = { paths = ["LICENSE"] }
+license-files = ['LICENSE']
 keywords = []
 authors = [{ name = "Keto D. Zhang", email = "keto.zhang@gmail.com" }]
 classifiers = [

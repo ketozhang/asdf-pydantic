@@ -1,5 +1,4 @@
 sphinx
 sphinx-autoapi
-sphinx-book-theme
 myst-parser
-pydata-sphinx-theme != 0.13.2
+shibuya

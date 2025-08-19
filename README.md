@@ -4,6 +4,10 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/asdf-pydantic.svg)](https://pypi.org/project/asdf-pydantic)
 [![Documentation Status](https://readthedocs.org/projects/asdf-pydantic/badge/?version=latest)](https://asdf-pydantic.readthedocs.io/en/latest/?badge=latest)
 
+:::{note}
+For v1, see [https://asdf-pydantic.readthedocs.io/en/v1/](https://asdf-pydantic.readthedocs.io/en/v1/)
+:::
+
 <div style="width: 33vw; min-width: 50em; max-width: 70em; margin:auto;">
 
 Define ASDF tags by writing [*Pydantic*](https://pydantic-docs.helpmanual.io/) models

@@ -28,6 +28,10 @@ af["rect"] = Rectangle(width=1, height=1)
 <details>
 <summary><b>ASDF File</b></summary>
 
+```py
+print(af.dumps())
+```
+
 ```yaml
 #ASDF 1.0.0
 #ASDF_STANDARD 1.5.0
@@ -60,6 +64,10 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
 <details>
 <summary><b>ASDF Schema</b></summary>
 
+```py
+print(af["rect"].model_asdf_schema())
+```
+
 
 ```yaml
 %YAML 1.1
@@ -88,6 +96,10 @@ required:
 <details>
 <summary><b>JSON Schema</b></summary>
 
+```py
+print(af["rect"].model_json_schema())
+```
+
 ```yaml
 {
     "properties": {
@@ -115,11 +127,11 @@ required:
 
 ## Features
 
-- [x] Create ASDF tag from your *pydantic* models with batteries ([converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)) included.
-- [x] Automatically generates ASDF schemas
-- [x] Validates data models as you create them and not only when reading and writing ASDF files.
-- [x] Preserve Python types when deserializing ASDF files.
-- [x] All the benefits with writing and using *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types).
+- [x] Create ASDF tag from your *pydantic* models with batteries ([converters](https://asdf.readthedocs.io/en/stable/asdf/extending/converters.html)) included
+- [x] Automatically generate ASDF schemas
+- [x] Validate data models as you create them, and not only when reading and writing ASDF files
+- [x] Preserve Python types when deserializing ASDF files
+- [x] All the benefits of *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types).
 
 ## Installation
 
@@ -130,7 +142,7 @@ pip install asdf-pydantic
 ## Usage
 
 Define your data model with `AsdfPydanticModel`. For *pydantic* fans, this has
-all the features of pydantic's BaseModel.
+all the features of *pydantic's* BaseModel.
 
 ```py
 # mypackage/shapes.py
@@ -164,7 +176,7 @@ class ShapesExtension(Extension):
     tags = [*converter.tags]
 ```
 
-After your extension is installed either the entrypoint method or temporarily
+After your extension is installed with either the entrypoint method or temporarily
 with `asdf.get_config()`:
 
 ```py
@@ -176,8 +188,12 @@ asdf.get_config().add_extension(ShapesExtension())
 af = asdf.AsdfFile()
 af["rect"] = Rectangle(width=1, height=1)
 
-with open("shapes.asdf", "wb") as fp:
-    af.write_to(fp)
+# Write
+af.write_to("shapes.asdf")
+
+# Read back and validate
+with asdf.open("shapes.asdf", "rb") as af:
+    print(af["rect"])
 ```
 
 ---

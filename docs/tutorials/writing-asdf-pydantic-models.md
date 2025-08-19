@@ -99,13 +99,3 @@ An ASDF field type is a Python type that can be serialized to a YAML file. These
       names: ["alice", "bob", "charlie"]
   ```
   Because `Employees` is not an [`AsdfPydanticModel`](#asdf_pydantic.AsdfPydanticModel), its field is not tagged. If it's fields are all recursively serializable, then it becomes an untagged ASDF object.
-
-### Custom field type
-
-You can define your own custom types in any way so that they would satisfy a
-[ASDF field type](#asdf-field-type). Here list a few options:
-
-1. Create a tagged ASDF type classically (involves defining a custom ASDF Converter
-and extension).
-2. Create a tagged ASDF type for composite types (e.g., dict-like, `dataclass`, `TypeDict`, `NamedTuple`), define a [`AsdfPydanticModel`](#asdf_pydantic.model.AsdfPydanticModel) subclass.
-3. Create untagged type is not yet supported.

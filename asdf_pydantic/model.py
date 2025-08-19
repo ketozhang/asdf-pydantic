@@ -14,8 +14,8 @@ class AsdfPydanticModel(BaseModel):
 
     ASDF Serialization and Deserialization:
         Serialize to ASDF yaml tree is done with the
-        py:classmethod`AsdfPydanticModel.asdf_yaml_tree()` and deserialize to an
-        AsdfPydanticModel object with py:meth`AsdfPydanticModel.model_validate()`.
+        {meth}`asdf_yaml_tree` and deserialize to an
+        AsdfPydanticModel object with {meth}`model_validate`.
     """
 
     _tag: ClassVar[str | TagDefinition]
@@ -24,22 +24,18 @@ class AsdfPydanticModel(BaseModel):
     def asdf_yaml_tree(self) -> dict:
         """Converts the model to an ASDF-compatible YAML tree (dict).
 
-        .. note::
-            Any fields that are normal Pydantic `BaseModel` will be converted to
-            dict. See conversion table.
+        :::{note}
+        Any fields that are normal Pydantic `BaseModel` will be converted to
+        dict. See conversion table.
+        :::
 
         Conversion Table:
 
-            +-------------------------+-----------------------------+
-            | Value type in field     | Value type in dict          |
-            +=========================+=============================+
-            | AsdfPydanticModel       | No conversion               |
-            +-------------------------+-----------------------------+
-            | BaseModel               | Converted to dict using     |
-            |                         | BaseModel.model_dump()      |
-            +-------------------------+-----------------------------+
-            | Other types             | No conversion               |
-            +-------------------------+-----------------------------+
+        | Value type in field       | Value type in dict                             |
+        |---------------------------|------------------------------------------------|
+        | AsdfPydanticModel         | No conversion                                  |
+        | BaseModel                 | Converted to dict using BaseModel.model_dump() |
+        | Other types               | No conversion                                  |
         """
         tree = {}
         for k, v in dict(self).items():

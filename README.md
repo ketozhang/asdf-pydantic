@@ -11,7 +11,7 @@ For v1, see [https://asdf-pydantic.readthedocs.io/en/v1/](https://asdf-pydantic.
 
 <div style="width: 33vw; min-width: 50em; max-width: 70em; margin:auto;">
 
-Define ASDF tags by writing [*Pydantic*](https://pydantic-docs.helpmanual.io/) models
+Define ASDF tags by writing [*pydantic*](https://pydantic-docs.helpmanual.io/) models
 
 ```py
 import asdf
@@ -136,12 +136,12 @@ print(af["rect"].model_json_schema())
 - [x] Automatically generate ASDF schemas
 - [x] Validate data models as you create them, and not only when reading and writing ASDF files
 - [x] Preserve Python types when deserializing ASDF files
-- [x] All the benefits of *pydantic* (e.g., JSON encoder, JSON schema, Pydantic types).
+- [x] All the benefits of *pydantic* (e.g., JSON encoder, JSON schema, *pydantic* types).
 
 ## Installation
 
 ```sh
-pip install asdf-pydantic
+pip install "asdf-pydantic>=2a"
 ```
 
 ## Usage

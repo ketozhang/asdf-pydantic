@@ -164,7 +164,7 @@ class Rectangle(AsdfPydanticModel):
     ]
 ```
 
-Then create an extension with the converter included with *asdf-pydantic*:
+Then create an ASDF extension with the help of the provided converter class [`AsdfPydanticConverter`](#asdf_pydantic.converter.AsdfPydanticConverter).
 
 ```py
 # mypackage/extensions.py

@@ -15,7 +15,22 @@ author = "Keto D. Zhang"
 
 extensions = ["myst_parser", "autoapi.extension"]
 autoapi_dirs = ["../asdf_pydantic"]
-myst_enable_extensions = ["tasklist"]
+myst_enable_extensions = [
+    "amsmath",
+    "tasklist",
+    "attrs_inline",
+    "colon_fence",
+    "deflist",
+    "dollarmath",
+    "fieldlist",
+    "html_admonition",
+    "html_image",
+    "replacements",
+    "smartquotes",
+    "strikethrough",
+    "substitution",
+    "tasklist",
+]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -24,5 +39,5 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_book_theme"
+html_theme = "shibuya"
 html_static_path = ["_static"]

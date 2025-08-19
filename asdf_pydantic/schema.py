@@ -4,28 +4,32 @@
 Type annotation must be added to the field to specify the ASDF tag to use in the
 ASDF schema. There are a few options to do this:
 
-    - Use `AsdfTag` to specify the tag URI.
-    - Use `WithAsdfSchema` and pass in a dictionary to extend the schema with
-    additional properties. The key `"$ref"` can be used to specify the tag URI.
+- Use {py:class}`AsdfTag` to specify the tag URI.
+- Use {py:class}`WithAsdfSchema` and pass in a dictionary to extend the schema with
+additional properties. The key `"$ref"` can be used to specify the tag URI.
 
-    from asdf_pydantic import AsdfPydanticModel
-    from asdf_pydantic.schema import AsdfTag
-    from astropy.table import Table
+```py
+from asdf_pydantic import AsdfPydanticModel
+from asdf_pydantic.schema import AsdfTag
+from astropy.table import Table
 
-    class MyModel(AsdfPydanticModel):
-        table: Annotated[Table, AsdfTag("http://stsci.edu/schemas/asdf.org/table/table-1.1.0")]
+class MyModel(AsdfPydanticModel):
+    table: Annotated[Table, AsdfTag("http://stsci.edu/schemas/asdf.org/table/table-1.1.0")]
+```
 
-For more customization of the ASDF schema output, you can use `WithAsdfSchema` to
+For more customization of the ASDF schema output, you can use {py:class}`WithAsdfSchema` to
 extend the schema with additional properties.
 
-    # Changing the title of the field
-    table: Annotated[
-        Table,
-        WithAsdfSchema({
-            "title": "TABLE",
-            "$ref": "http://stsci.edu/schemas/asdf.org/table/table-1.1.0"
-        }),
-    ]
+```py
+# Changing the title of the field
+table: Annotated[
+    Table,
+    WithAsdfSchema({
+        "title": "TABLE",
+        "$ref": "http://stsci.edu/schemas/asdf.org/table/table-1.1.0"
+    }),
+]
+```
 """
 
 from typing import Literal, Optional

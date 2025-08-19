@@ -83,7 +83,13 @@ matrix.asdf.dependencies = [
 ]
 
 [tool.hatch.envs.docs]
-dependencies = ["sphinx", "sphinx-autoapi", "sphinx-book-theme", "myst-parser"]
+dependencies = [
+  "sphinx",
+  "sphinx-autodoc2",
+  "myst-parser",
+  "shibuya",
+  "numpydoc",
+]
 
 [tool.hatch.envs.docs.scripts]
 build = "sphinx-build -b html docs docs/_build/html {args}"

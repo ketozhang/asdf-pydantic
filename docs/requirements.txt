@@ -1,4 +1,4 @@
 sphinx
-sphinx-autoapi
+sphinx-autodoc2
 myst-parser
 shibuya

@@ -145,7 +145,7 @@ pip install asdf-pydantic
 
 ## Usage
 
-Define your data model with `AsdfPydanticModel`. For *pydantic* fans, this has
+Define your data model with [`AsdfPydanticModel`](#asdf_pydantic.model.AsdfPydanticModel). For *pydantic* fans, this has
 all the features of *pydantic's* BaseModel.
 
 ```py
@@ -200,9 +200,11 @@ with asdf.open("shapes.asdf", "rb") as af:
     print(af["rect"])
 ```
 
----
+## Read Further
 
-```sh
+```{toctree}
 :maxdepth: 1
-model
-autoapi
+
+tutorials/index
+apidocs/index
+```

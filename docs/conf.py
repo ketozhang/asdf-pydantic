@@ -13,8 +13,9 @@ author = "Keto D. Zhang"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser", "autoapi.extension"]
-autoapi_dirs = ["../asdf_pydantic"]
+extensions = ["myst_parser", "autodoc2"]
+autodoc2_packages = ["../asdf_pydantic"]
+autodoc2_render_plugin = "myst"
 myst_enable_extensions = [
     "amsmath",
     "tasklist",

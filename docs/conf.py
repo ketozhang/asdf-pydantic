@@ -31,7 +31,11 @@ myst_enable_extensions = [
     "strikethrough",
     "substitution",
     "tasklist",
+    "numpydoc",
 ]
+html_theme_options = {
+    "github_url": "https://github.com/ketozhang/asdf-pydantic",
+}
 html_css_files = [
     "custom.css",
 ]

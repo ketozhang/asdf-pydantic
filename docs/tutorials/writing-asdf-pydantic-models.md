@@ -2,7 +2,7 @@
 ```
 # Writing ASDF Pydantic models to define tagged objects
 
-The [AsdfPydanticModel](#asdf_pydantic.AsdfPydanticModel) is a class that combines the features of [`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/) and ASDF to be readily serializable as tagged objects in an ASDF file.
+The [AsdfPydanticModel](#asdf_pydantic.model.AsdfPydanticModel) is a class that combines the features of [`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/) and ASDF to be readily serializable as tagged objects in an ASDF file.
 
 ```py
 class Rectangle(AsdfPydanticModel):
@@ -57,7 +57,7 @@ An ASDF field type is a Python type that can be serialized to a YAML file. These
 
   Here, if `asdf-astropy` is installed, then the `Quantity` type is a valid ASDF tagged.
 
-- Any subtype of [AsdfPydanticModel](#asdf_pydantic.AsdfPydanticModel):
+- Any subtype of [AsdfPydanticModel](#asdf_pydantic.model.AsdfPydanticModel):
 
   ```py
   class Employees(AsdfPydanticModel):
@@ -76,7 +76,7 @@ An ASDF field type is a Python type that can be serialized to a YAML file. These
     employees: !<asdf://asdf-pydantic/examples/tags/employees-1.0.0>
       names: ["alice", "bob", "charlie"]
   ```
-  Because both `Office` and `Employees` are [`AsdfPydanticModel`](#asdf_pydantic.AsdfPydanticModel), both fields are tagged.
+  Because both `Office` and `Employees` are [`AsdfPydanticModel`](#asdf_pydantic.model.AsdfPydanticModel), both fields are tagged.
 
 - A subtype of [`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/):
 
@@ -98,4 +98,4 @@ An ASDF field type is a Python type that can be serialized to a YAML file. These
     employees:
       names: ["alice", "bob", "charlie"]
   ```
-  Because `Employees` is not an [`AsdfPydanticModel`](#asdf_pydantic.AsdfPydanticModel), its field is not tagged. If it's fields are all recursively serializable, then it becomes an untagged ASDF object.
+  Because `Employees` is not an [`AsdfPydanticModel`](#asdf_pydantic.model.AsdfPydanticModel), its field is not tagged. If it's fields are all recursively serializable, then it becomes an untagged ASDF object.

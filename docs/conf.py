@@ -18,7 +18,6 @@ autodoc2_packages = ["../asdf_pydantic"]
 autodoc2_render_plugin = "myst"
 myst_enable_extensions = [
     "amsmath",
-    "tasklist",
     "attrs_inline",
     "colon_fence",
     "deflist",

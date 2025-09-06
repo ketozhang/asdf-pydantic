@@ -32,6 +32,7 @@ myst_enable_extensions = [
 ]
 html_theme_options = {
     "github_url": "https://github.com/ketozhang/asdf-pydantic",
+    "globaltoc_expand_depth": 1,
 }
 html_css_files = [
     "custom.css",

@@ -23,14 +23,12 @@ myst_enable_extensions = [
     "deflist",
     "dollarmath",
     "fieldlist",
-    "html_admonition",
     "html_image",
     "replacements",
     "smartquotes",
     "strikethrough",
     "substitution",
     "tasklist",
-    "numpydoc",
 ]
 html_theme_options = {
     "github_url": "https://github.com/ketozhang/asdf-pydantic",

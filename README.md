@@ -205,6 +205,7 @@ with asdf.open("shapes.asdf", "rb") as af:
 ```{toctree}
 :maxdepth: 1
 
+concepts/index
 tutorials/index
 apidocs/index
 ```

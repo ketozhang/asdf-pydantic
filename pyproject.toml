@@ -51,6 +51,9 @@ cov-report = "coverage report {args}"
 [tool.hatch.envs.test]
 template = "default"
 matrix-name-format = "{variable}={value}"
+dependencies = [
+  "asdf-pydantic-example @ {root:uri}/tests/asdf-pydantic-example",
+]
 
 [tool.hatch.envs.test.scripts]
 test = "pytest {args}"

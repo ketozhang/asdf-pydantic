@@ -1,0 +1,18 @@
+[project]
+name = "asdf-pydantic-example"
+version = "0.1.0"
+description = "Example project for asdf-pydantic"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "asdf-pydantic",
+    "astropy"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.entry-points]
+'asdf.extensions' = { shapes_extension = 'shapes.integration:get_extensions' }
+'asdf.resource_mappings' = { shapes_schemas = 'shapes.integration:get_resource_mappings' }

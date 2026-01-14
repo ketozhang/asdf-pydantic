@@ -4,6 +4,11 @@ on:
     branches: ["main", "v1"]
   pull_request:
     branches: ["main", "v1"]
+  schedule:
+    # Runs weekly to check against latest verion of deps
+    # as this project doesn't get into PR frequently enough
+    # to run these tests.
+    - cron: '0 18 * * MON'
 
 jobs:
   prepare-matrix:

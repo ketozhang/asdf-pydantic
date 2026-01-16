@@ -1,0 +1,24 @@
+name: Update badges
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Create ASDF version supported badge
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.GIST_TOKEN }}
+        gistID: 78d5f642122c6136118836b54899b7d4
+        filename: badges.json
+        label: asdf
+        message: 3 | 4
+        color: orange

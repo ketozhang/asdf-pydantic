@@ -39,14 +39,11 @@ repos:
         name: generate-hatch-matrix
         language: system
         stages: [pre-push]
-        entry: bash .github/workflows/generate-hatch-matrix.sh
-        files: |
-            (?x)^(
-                .github/workflows/generate-hatch-matrix.sh|
-                .github/workflows/hatch-matrix.json
-            )$
+        always_run: true
+        entry: bash scripts/generate-hatch-matrix.sh
+        files: .github/workflows/hatch-matrix.json
         args: [".github/workflows/hatch-matrix.json"]
-        pass_filenames: false
+        pass_filenames: true
         types: [file]
 
 ci:

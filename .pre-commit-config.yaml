@@ -19,3 +19,35 @@ repos:
     rev: '23.1.0'
     hooks:
       - id: black
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.2.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
+  - repo: local
+    hooks:
+      - id: generate-hatch-matrix
+        name: generate-hatch-matrix
+        language: system
+        stages: [pre-push]
+        always_run: true
+        entry: bash scripts/generate-hatch-matrix.sh
+        files: .github/workflows/hatch-matrix.json
+        args: [".github/workflows/hatch-matrix.json"]
+        pass_filenames: true
+        types: [file]
+
+ci:
+    # autofix_commit_msg: |
+    #     [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    #     for more information, see https://pre-commit.ci
+    autofix_prs: false
+    # autoupdate_branch: ''
+    # autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+    autoupdate_schedule: quarterly
+    skip:
+      - generate-hatch-matrix
+    # submodules: false

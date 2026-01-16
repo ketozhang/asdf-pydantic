@@ -2,8 +2,8 @@
 
 ## Branches
 
-- `main` for active development. Changes submitted via pull request.
-- `vX` for public release of version X.
+All active development are on the `main` branch and releases are made on git
+tags.
 
 ## Contributing Code
 
@@ -14,7 +14,5 @@ Pre-commit is available to help you pass the pull request checks.
 
 ## Making a New Release
 
-1. A new major release `X.0.0` will have a new branch `vX`. A minor and patch
-release will use existing branch.
-2. Create and increment Github releases.
-3. Build and release to PyPI with hatch.
+1. Create and increment Github releases.
+2. Build and release to PyPI with hatch (CI TBD).

@@ -23,7 +23,7 @@ classifiers = [
 ]
 dependencies = [
   "asdf>=2",
-  "pydantic>=1",
+  "pydantic>=1,<2",
 ]
 dynamic = ["version"]
 

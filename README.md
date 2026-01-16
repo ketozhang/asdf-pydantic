@@ -63,7 +63,7 @@ rect: !<asdf://asdf-pydantic/shapes/tags/rectangle-1.0.0> {
 ## Installation
 
 ```console
-pip install asdf-pydantic
+pip install "asdf-pydantic>=1,<2"
 ```
 
 ## Usage

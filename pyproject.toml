@@ -58,7 +58,7 @@ test = "pytest {args}"
 [[tool.hatch.envs.test.matrix]]
 python = ["3.10", "3.11", "3.12"]
 numpy = ["1", "2"]
-asdf = ["3", "4"]
+asdf = ["3", "4", "latest"]
 
 [tool.hatch.envs.test.overrides]
 matrix.numpy.dependencies = [
@@ -79,6 +79,9 @@ matrix.asdf.dependencies = [
   ] },
   { value = "asdf>=4,<5", if = [
     "4",
+  ] },
+  { value = "asdf", if = [
+    "latest",
   ] },
 ]
 

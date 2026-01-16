@@ -39,6 +39,9 @@ jobs:
       run: hatch -e ${{ matrix.hatch-env-name }} run test-cov
     - name: Coverage report
       run: hatch run cov-report
+    - name: List Python dependencies
+      if: always()
+      run: hatch -e ${{ matrix.hatch-env-name }} run uv pip list
 
   check:
     name: check all unit tests pass

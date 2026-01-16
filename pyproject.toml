@@ -51,7 +51,45 @@ dependencies = [
 
 [tool.hatch.envs.default.scripts]
 test = "pytest {args}"
-test-cov = "test --cov-report=term-missing --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
+test-cov = "test --cov-report= --cov-config=pyproject.toml --cov=asdf_pydantic --cov=tests {args}"
+cov-report = "coverage report {args}"
+
+[tool.hatch.envs.test]
+template = "default"
+matrix-name-format = "{variable}={value}"
+
+[tool.hatch.envs.test.scripts]
+test = "pytest {args}"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.10", "3.11", "3.12"]
+numpy = ["1", "2"]
+asdf = ["3", "4", "latest"]
+
+[tool.hatch.envs.test.overrides]
+matrix.numpy.dependencies = [
+  { value = "numpy>=1,<2", if = [
+    "1",
+  ] },
+  { value = "numpy>=2,<3", if = [
+    "2",
+  ] },
+  { value = "astropy>=6.1", if = [
+    "2",
+  ] },
+]
+
+matrix.asdf.dependencies = [
+  { value = "asdf>=3,<4", if = [
+    "3",
+  ] },
+  { value = "asdf>=4,<5", if = [
+    "4",
+  ] },
+  { value = "asdf", if = [
+    "latest",
+  ] },
+]
 
 [tool.hatch.envs.docs]
 dependencies = [

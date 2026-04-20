@@ -56,7 +56,7 @@ matrix-name-format = "{variable}={value}"
 test = "pytest {args}"
 
 [[tool.hatch.envs.test.matrix]]
-python = ["3.10", "3.11", "3.12"]
+python = ["3.10", "3.11", "3.12", "3.14"]
 numpy = ["1", "2"]
 asdf = ["3", "4", "latest"]
 

@@ -1,94 +1,116 @@
 # Fields
 
-Fields are the attributes of your model. asdf-pydantic focuses on implementing fields that are compatible with ASDF. A compatible field is one that can be serialized to ASDF file and deserialized back to original data type.
+Fields are the attributes of your model. An ASDF-compatible field is one that can be serialized to an ASDF file and deserialized back to its original Python type.
 
+## Supported Field Types
 
-- ASDF standard fields
+### ASDF Standard Fields
 
-  A standard ASDF type from the [ASDF's standard schema definitions](https://asdf-standard.readthedocs.io/en/latest/schemas/index.html#asdf-standard-schema-definitions).
+The [ASDF standard](https://asdf-standard.readthedocs.io/en/latest/schemas/index.html#asdf-standard-schema-definitions) defines schemas for many common Python types. Any field whose type has an ASDF standard schema works out of the box. This includes primitive types (`int`, `float`, `str`, `bool`), collections (`list`, `dict`), and richer types like `datetime.datetime` and `numpy.ndarray`.
 
-  ```py
-  class Employees(AsdfPydanticModel):
-      _tag = "asdf://asdf-pydantic/examples/tags/employees-1.0.0"
-      last_updated: datetime.datetime
-      names: list[str]
-  ```
+```python
+import datetime
+import numpy as np
+from asdf_pydantic import AsdfPydanticModel
 
+class Image(AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/image-1.0.0"
 
-  ```yaml
-  example: !<asdf://asdf-pydantic/examples/tags/employees-1.0.0>
-    last_updated: !time/time-1.2.0 "2000-12-31T13:05:27.737"
-    names: ["alice", "bob", "charlie"]
-  ```
+    data: np.ndarray
+    time: datetime.datetime
+    metadata: dict[str, str]
 
-  These include many Python standard types such as `int`, `float`, `str`, `bool`, `list`, `dict`, and more complex types like `datetime.datetime`, `numpy.ndarray`, etc.
+print(
+  Image(
+    data=np.zeros(100, 100),
+    time=datetime.datetime(1970, 1, 1, 0, 0, 0),
+    metadata={"filter": "r"},
+  )
+)
+```
 
-- 3rd party ASDF fields
+```yaml
+image: !<asdf://asdf-pydantic/examples/tags/image-1.0.0>
+  data: !numpy/ndarray-1.0.0
+    datatype: float64
+    shape: [100, 100]
+  time: !time/time-1.2.0 "1970-01-01T00:00:00"
+  metadata: {filter: r}
+```
 
-  ```py
-  from astropy import units as u
+### Third-Party ASDF Fields
 
-  class Rectangle(AsdfPydanticModel):
-      _tag = "asdf://asdf-pydantic/examples/tags/rectangle-1.0.0"
+Some packages extend ASDF with their own types and schemas. For example, installing [`asdf-astropy`](https://asdf-astropy.readthedocs.io/) adds support for `astropy` types such as `Quantity` and `Time`. Fields using these types are serialized using the schema provided by the third-party package.
 
-      # Astropy provides u.Quantity and schema
-      width: u.Quantity[u.m]
-      height: u.Quantity[u.m]
-  ```
+```python
+from astropy import units as u
+from asdf_pydantic import AsdfPydanticModel
 
+class Rectangle(AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/rectangle-1.0.0"
 
-  ```yaml
-  rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0>
-    width: {datatype: float64, unit: !unit/unit-1.0.0 m, value: 1.0}
-    height: {datatype: float64, unit: !unit/unit-1.0.0 m, value: 2.0}
-  ```
+    width: u.Quantity[u.m]
+    height: u.Quantity[u.m]
+```
 
-  Here, the astropy `u.Quantity` data type is compatible with ASDF if the package `asdf-astropy` is installed.
+```yaml
+rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0>
+  width: {datatype: float64, unit: !unit/unit-1.0.0 m, value: 1.0}
+  height: {datatype: float64, unit: !unit/unit-1.0.0 m, value: 2.0}
+```
 
-- A subtype of [`AsdfPydanticModel`](#asdf_pydantic.model.AsdfPydanticModel):
+If asdf-pydantic cannot automatically determine the schema for a third-party type or you want to use a specific ASDF schema, see [Associating a schema to a field](#associating-a-schema-to-a-field).
 
-  ```py
-  class Employees(AsdfPydanticModel):
-      _tag = "asdf://asdf-pydantic/examples/tags/employees-1.0.0"
-      names: list[str]
+### AsdfPydanticModel Fields
 
-  class Office(AsdfPydanticModel):
-      _tag = "asdf://asdf-pydantic/examples/tags/office-1.0.0"
+All types created with this package using [`AsdfPydanticModel`](#asdf_pydantic.model.AsdfPydanticModel) are automatically ASDF-compatible. Both models are written as tagged objects in the ASDF file.
 
-      employees: Employees
-  ```
+```python
+from asdf_pydantic import AsdfPydanticModel
 
+class Employees(AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/employees-1.0.0"
 
-  ```yaml
-  office: !<asdf://asdf-pydantic/examples/tags/office-1.0.0>
-    employees: !<asdf://asdf-pydantic/examples/tags/employees-1.0.0>
-      names: ["alice", "bob", "charlie"]
-  ```
-  Because both `Office` and `Employees` are [`AsdfPydanticModel`](#asdf_pydantic.model.AsdfPydanticModel), both fields are tagged.
-
-- A subtype of [`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/)
-
-  If all fields of the Pydantic model are ASDF-compatible, then the model itself is also ASDF-compatible.
-
-  ```py
-  from pydantic import BaseModel
-
-  class Employees(BaseModel):
     names: list[str]
 
-  class Office(AsdfPydanticModel):
-      _tag = "asdf://asdf-pydantic/examples/tags/office-1.0.0"
+class Office(AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/office-1.0.0"
 
-      employees: Employees
-  ```
+    employees: Employees
+```
 
+```yaml
+office: !<asdf://asdf-pydantic/examples/tags/office-1.0.0>
+  employees: !<asdf://asdf-pydantic/examples/tags/employees-1.0.0>
+    names: ["alice", "bob", "charlie"]
+```
 
-  ```yaml
-  office: !<asdf://asdf-pydantic/examples/tags/office-1.0.0>
-    employees:         # NOTE: ASDF tag is not present here
-      names: ["alice", "bob", "charlie"]
-  ```
-  Notice the `.office.employees` field is not a tagged because `Employees`, but it is still ASDF-compatible because all its fields are ASDF-compatible.
+Both `Office` and `Employees` carry their own ASDF tags, so each is independently tagged in the serialized file.
+
+### Pydantic BaseModel Fields
+
+A field whose type is a plain [`pydantic.BaseModel`](https://docs.pydantic.dev/usage/models/) subclass (not an `AsdfPydanticModel`) is ASDF-compatible as long as all of its own fields are also ASDF-compatible. The model is serialized as an untagged mapping.
+
+```python
+from pydantic import BaseModel
+from asdf_pydantic import AsdfPydanticModel
+
+class Employees(BaseModel):
+    names: list[str]
+
+class Office(AsdfPydanticModel):
+    _tag = "asdf://asdf-pydantic/examples/tags/office-1.0.0"
+
+    employees: Employees
+```
+
+```yaml
+office: !<asdf://asdf-pydantic/examples/tags/office-1.0.0>
+  employees:  # no ASDF tag — Employees is a plain BaseModel
+    names: ["alice", "bob", "charlie"]
+```
+
+Because `Employees` is not an `AsdfPydanticModel`, it has no ASDF tag and is written as a plain mapping. Its fields are still serialized correctly because `list[str]` is an ASDF standard type.
 
 ## ASDF Field Schema
 
@@ -96,7 +118,7 @@ All tagged fields in ASDF must have a schema associated for ASDF to perform vali
 
 ### Associating a schema to a field
 
-Any field may be have a schema associated or overwritten by type annotating the field with an [`AsdfTag`](#asdf_pydantic.schema.AsdfTag) or [`withAsdfSchema`](#asdf_pydantic.schema.WithAsdfSchema).
+Any field may be have a schema associated or overwritten by type annotating the field with an [`AsdfTag`](#asdf_pydantic.schema.AsdfTag) or [`WithAsdfSchema`](#asdf_pydantic.schema.WithAsdfSchema).
 
 ```{autodoc2-object} asdf_pydantic.schema.AsdfTag
 render_plugin = "myst"

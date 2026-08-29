@@ -32,6 +32,7 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
+        args: [--verbose]
 
   - repo: local
     hooks:

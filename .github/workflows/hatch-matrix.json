@@ -71,6 +71,30 @@
     {
       "hatch-env-name": "test.py3.12-numpy=2-asdf=latest",
       "python-version": "3.12"
+    },
+    {
+      "hatch-env-name": "test.py3.14-numpy=1-asdf=3",
+      "python-version": "3.14"
+    },
+    {
+      "hatch-env-name": "test.py3.14-numpy=1-asdf=4",
+      "python-version": "3.14"
+    },
+    {
+      "hatch-env-name": "test.py3.14-numpy=1-asdf=latest",
+      "python-version": "3.14"
+    },
+    {
+      "hatch-env-name": "test.py3.14-numpy=2-asdf=3",
+      "python-version": "3.14"
+    },
+    {
+      "hatch-env-name": "test.py3.14-numpy=2-asdf=4",
+      "python-version": "3.14"
+    },
+    {
+      "hatch-env-name": "test.py3.14-numpy=2-asdf=latest",
+      "python-version": "3.14"
     }
   ]
 }

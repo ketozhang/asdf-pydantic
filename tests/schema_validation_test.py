@@ -74,7 +74,7 @@ history:
         software: !core/software-1.0.0 {name: asdf-pydantic, version: 0.1.0}
 rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 10.0, width: 10.0}
 ...
-    """).strip().encode("utf-8"))  # noqa: E501
+    """).strip().encode("utf-8"))
         tempfile.seek(0)
 
         asdf.open(tempfile.name)
@@ -105,7 +105,7 @@ history:
         software: !core/software-1.0.0 {name: asdf-pydantic, version: 0.1.0}
 rect: !<asdf://asdf-pydantic/examples/tags/rectangle-1.0.0> {height: 1.0, width: "somestr"}
 ...
-    """).strip().encode("utf-8"))  # noqa: E501
+    """).strip().encode("utf-8"))
         tempfile.seek(0)
 
         # HACK: It is better that the ASDF's schema validation fails before
@@ -132,7 +132,7 @@ def test_given_child_field_contains_asdf_object_then_schema_has_child_tag():
 ########################################################################################
 # AsdfTag
 ########################################################################################
-from asdf_pydantic.schema import AsdfTag  # noqa: E402
+from asdf_pydantic.schema import AsdfTag
 
 
 @pytest.mark.parametrize(

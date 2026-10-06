@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Optional, Union
+from typing import Any
 
 import asdf
 import pytest
@@ -13,10 +13,10 @@ class UnionObject(AsdfPydanticModel):
     _tag = "asdf://asdf-pydantic/examples/tags/unionobject-1.0.0"
 
     # Order of type matters
-    int_or_str: Union[int, str] = 0
-    datetime_or_time: Union[datetime, Time] = datetime(2023, 1, 1)
-    collection: Union[list, set] = []
-    anything: Optional[Any] = None
+    int_or_str: int | str = 0
+    datetime_or_time: datetime | Time = datetime(2023, 1, 1)
+    collection: list | set = []
+    anything: Any | None = None
 
 
 def setup_module():

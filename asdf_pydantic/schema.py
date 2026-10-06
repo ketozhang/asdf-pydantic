@@ -32,7 +32,7 @@ table: Annotated[
 ```
 """
 
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import WithJsonSchema
 from pydantic.json_schema import GenerateJsonSchema
@@ -68,13 +68,13 @@ class GenerateAsdfSchema(GenerateJsonSchema):
         self,
         by_alias: bool = True,
         ref_template: str = DEFAULT_ASDF_SCHEMA_REF_TEMPLATE,
-        tag_uri: Optional[str] = None,
+        tag_uri: str | None = None,
     ):
         super().__init__(by_alias=by_alias, ref_template=ref_template)
         self.tag_uri = tag_uri
 
     def generate(self, schema, mode="validation"):
-        json_schema = super().generate(schema, mode)  # noqa: F841
+        json_schema = super().generate(schema, mode)
 
         if self.tag_uri:
             json_schema["$schema"] = self.schema_dialect

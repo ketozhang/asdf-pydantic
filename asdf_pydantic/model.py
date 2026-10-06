@@ -101,7 +101,7 @@ class AsdfPydanticModel(BaseModel):
         ----------
         metaschema, optional
             A metaschema URI
-        """  # noqa: E501
+        """
         if metaschema != GenerateAsdfSchema.schema_dialect:
             raise NotImplementedError(
                 f"Only {GenerateAsdfSchema.schema_dialect} is supported as metaschema."
